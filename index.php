@@ -7,9 +7,9 @@
       padding-left: 15rem;
       padding-top: 2rem;
       max-width: 82%;
-
     }
   </style>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <?php
 	session_start();

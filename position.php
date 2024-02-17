@@ -1,332 +1,210 @@
-<?php include('db_connect.php'); ?>
-<html>
+<?php include 'dbconnect.php' ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-	<style>
-		/* Resetting some default margin */
-		body,
-		h1,
-		h2,
-		h3,
-		h4,
-		p,
-		ul,
-		li {
-			margin: 0;
-			padding: 0;
-		}
+    <script>
+        function reset() {
+            $('#manage-position').get(0).reset();
+        }
 
-		/* Container Styles */
-		.container-fluid {
-			width: 100%;
-			margin-right: auto;
-			margin-left: auto;
-		}
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this record?");
+        }
 
-		/* Column Styles */
-		.col-lg-12 {
-			width: 100%;
-		}
+        $(document).ready(function() {
+            $('button[data-id]').click(function() {
+                start_load();
+                var cat = $('#manage-position');
+                cat.get(0).reset();
+                cat.find("[name='id']").val($(this).attr('data-id'));
+                cat.find("[name='name']").val($(this).attr('data-name'));
+                cat.find("[name='department']").val($(this).attr('data-dep'));
+                end_load();
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-		.col-md-4 {
-			width: 33.33%;
-			float: left;
-		}
+        .depmain {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
 
-		.col-md-8 {
-			width: 66.66%;
-			float: left;
-		}
+        .depleft,
+        .depright {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            /* Add border around depleft */
+        }
 
-		/* Card Styles */
-		.card {
-			border: 1px solid #ddd;
-			border-radius: 8px;
-			margin-bottom: 20px;
-		}
+        .depleftup {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-		.card-header {
-			background-color: #f8f9fa;
-			padding: 15px;
-			border-bottom: 1px solid #ddd;
-			border-radius: 8px 8px 0 0;
-		}
+        .depleftmid,
+        .depleftdown {
+            margin-bottom: 10px;
+        }
 
-		.card-body {
-			padding: 15px;
-		}
+        .depleftmid textarea {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
 
-		.card-footer {
-			padding: 15px;
-			border-top: 1px solid #ddd;
-			border-radius: 0 0 8px 8px;
-		}
+        .depleftdown {
+            display: flex;
+            align-items: center;
+        }
 
-		/* Form Styles */
-		#manage-position {
-			margin: 0;
-		}
+        .depleftdown input,
+        .depleftdown button {
+            padding: 8px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
 
-		.form-group {
-			margin-bottom: 15px;
-		}
+        .depleftdown input {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
 
-		.control-label {
-			font-weight: bold;
-		}
+        .depleftdown button {
+            background-color: red;
+            color: white;
+            border: none;
+        }
 
-		.form-control {
-			width: 100%;
-			padding: 8px;
-			box-sizing: border-box;
-		}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-		/* Select2 Styles */
-		.select2 {
-			width: 100% !important;
-		}
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-		/* Button Styles */
-		.btn {
-			cursor: pointer;
-			display: inline-block;
-			padding: 10px 15px;
-			text-align: center;
-			text-decoration: none;
-			border-radius: 5px;
-		}
+        th {
+            background-color: #f2f2f2;
+        }
 
-		.btn-primary {
-			background-color: #007bff;
-			color: #fff;
-		}
-
-		.btn-default {
-			background-color: #ced4da;
-			color: #495057;
-		}
-
-		/* Table Styles */
-		.table {
-			width: 100%;
-			margin-bottom: 1rem;
-			color: #212529;
-			border-collapse: collapse;
-		}
-
-		.table-bordered {
-			border: 1px solid #ddd;
-		}
-
-		.table th,
-		.table td {
-			padding: 8px;
-			text-align: left;
-			border-bottom: 1px solid #ddd;
-		}
-
-		.table th {
-			background-color: #f8f9fa;
-		}
-
-		/* Truncate Style */
-		td p {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-
-		/* Script Styles */
-		img {
-			max-width: 100px;
-			max-height: 150px;
-		}
-
-		/* Additional Styles */
-		td {
-			vertical-align: middle !important;
-		}
-
-		/* Custom Styles */
-		.btn-group {
-			position: relative;
-			display: inline-block;
-			vertical-align: middle;
-		}
-
-		.btn-group .btn {
-			border-radius: 0;
-		}
-
-		.btn-group .dropdown-toggle-split {
-			padding-right: 0.5rem;
-			padding-left: 0.5rem;
-		}
-	</style>
+        form {
+            margin: 0;
+        }
+    </style>
 </head>
+
 <body>
-	<div class="container-fluid">
-		<div class="col-lg-12">
-			<div class="row">
-				<div class="col-md-4">
-					<form action="" id="manage-position">
-						<div class="card">
-							<div class="card-header">
-								Position Form
-							</div>
-							<div class="card-body">
-								<input type="hidden" name="id">
-								<div class="form-group">
-									<label class="control-label">Department</label>
-									<select class="custom-select browser-default select2" name="department_id">
-										<option value=""></option>
-										<?php
-										$dept = $conn->query("SELECT * from department order by name asc");
-										while ($row = $dept->fetch_assoc()) :
-										?>
-											<option value="<?php echo $row['id'] ?>"><?php echo $row['name'] ?></option>
-										<?php endwhile; ?>
-									</select>
-								</div>
-								<div class="form-group">
-									<label class="control-label">Name</label>
-									<textarea name="name" id="" cols="30" rows="2" class="form-control"></textarea>
-								</div>
-							</div>
-							<div class="card-footer">
-								<div class="row">
-									<div class="col-md-12">
-										<button class="btn btn-sm btn-primary col-sm-3 offset-md-3"> Save</button>
-										<button class="btn btn-sm btn-default col-sm-3" type="button" onclick="_reset()"> Cancel</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="col-md-8">
-					<div class="card">
-						<div class="card-body">
-							<table class="table table-bordered table-hover">
-								<thead>
-									<tr>
-										<th class="text-center">#</th>
-										<th class="text-center">Position</th>
-										<th class="text-center">Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-									$i = 1;
-									$position = $conn->query("SELECT * FROM position order by id asc");
-									while ($row = $position->fetch_assoc()) :
-									?>
-										<tr>
-											<td class="text-center"><?php echo $i++ ?></td>
-
-											<td class="">
-												<p> <b><?php echo $row['name'] ?></b></p>
-											</td>
-											<td class="text-center">
-												<button class="btn btn-sm btn-primary edit_position" type="button" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-department_id="<?php echo $row['department_id'] ?>">Edit</button>
-												<button class="btn btn-sm btn-danger delete_position" type="button" data-id="<?php echo $row['id'] ?>">Delete</button>
-											</td>
-										</tr>
-									<?php endwhile; ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-		function _reset() {
-			$('[name="id"]').val('');
-			$('#manage-position').get(0).reset();
-			$('.select2').val('').select2({
-				placeholder: "Please Select Here",
-				width: "100%"
-			})
-		}
-		$('.select2').select2({
-			placeholder: "Please Select Here",
-			width: "100%"
-		})
-		$('#manage-position').submit(function(e) {
-			e.preventDefault()
-			start_load()
-			$.ajax({
-				url: 'ajax.php?action=save_position',
-				data: new FormData($(this)[0]),
-				cache: false,
-				contentType: false,
-				processData: false,
-				method: 'POST',
-				type: 'POST',
-				success: function(resp) {
-					if (resp == 1) {
-						alert_toast("Data successfully added", 'success')
-						setTimeout(function() {
-							location.reload()
-						}, 1500)
-
-					} else if (resp == 2) {
-						alert_toast("Data successfully updated", 'success')
-						setTimeout(function() {
-							location.reload()
-						}, 1500)
-
-					}
-				}
-			})
-		})
-		$('.edit_position').click(function() {
-			start_load()
-			var cat = $('#manage-position')
-			cat.get(0).reset()
-			cat.find("[name='id']").val($(this).attr('data-id'))
-			cat.find("[name='name']").val($(this).attr('data-name'))
-			$('[name="department_id"]').val($(this).attr('data-department_id')).select2({
-				width: "100%"
-			})
-			end_load()
-		})
-		$('.delete_position').click(function() {
-			_conf("Are you sure to delete this position?", "delete_position", [$(this).attr('data-id')])
-		})
-
-		function displayImg(input, _this) {
-			if (input.files && input.files[0]) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					$('#cimg').attr('src', e.target.result);
-				}
-
-				reader.readAsDataURL(input.files[0]);
-			}
-		}
-
-		function delete_position($id) {
-			start_load()
-			$.ajax({
-				url: 'ajax.php?action=delete_position',
-				method: 'POST',
-				data: {
-					id: $id
-				},
-				success: function(resp) {
-					if (resp == 1) {
-						alert_toast("Data successfully deleted", 'success')
-						setTimeout(function() {
-							location.reload()
-						}, 1500)
-
-					}
-				}
-			})
-		}
-	</script>
+    <div class="depmain">
+        <div class="depleft">
+            <form action="http://localhost/final/index.php?page=position" method="post" id="manage-position">
+                <div class="depleftup">Position</div>
+                <div class="depleftmid">
+                    <input type="hidden" name="id" value="<?php echo isset($edit_id) ? $edit_id : ''; ?>">
+                    <label class="control-label">Department</label><br>
+                    <select name="department">
+                        <option value=""></option>
+                        <?php
+                        $dept = $conn->query("SELECT * from department order by dname asc");
+                        while ($row = $dept->fetch_assoc()) :
+                        ?>
+                            <option value="<?php echo $row['id'] ?>"><?php echo $row['dname'] ?></option>
+                        <?php endwhile; ?>
+                    </select><br>
+                    <label class="control-label">Name</label><br>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="depleftdown">
+                    <input type="submit" name="submit" value="<?php echo isset($edit_id) ? 'Update' : 'Save'; ?>">
+                    <button type="button" onclick="reset()">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div class="depright">
+            <table border=1>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                $sql = "SELECT position.id, position.name, department.dname, position.department_id FROM `position` INNER JOIN department ON position.department_id = department.id; ";
+                $result = mysqli_query($conn, $sql);
+                $num = mysqli_num_rows($result);
+                $sno = 1;
+                if ($num > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>" . $sno++ . "</td>";
+                        echo "<td>" . $row['name'] . "</td>";
+                ?>
+                        <td>
+                            <button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-dep="<?php echo $row['department_id']; ?>">Edit</button>
+                            <form method="post" onsubmit="return confirmDelete()">
+                                <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                                <input type="submit" name="delete" value="Delete">
+                            </form>
+                        </td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+            </table>
+        </div>
+    </div>
 </body>
+
 </html>
+
+<?php
+if (isset($_POST['submit'])) {
+    $edit_id = $_POST['id'];
+    $name = $_POST['name'];
+    $dept = $_POST['department'];
+    if ($edit_id != '') {
+        $sql_update = "UPDATE position SET department_id='$dept', name='$name' WHERE id='$edit_id'";
+        $result_update = mysqli_query($conn, $sql_update);
+        if ($result_update) {
+            echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+        } else {
+            echo '<script>console.log("Error updating record!");</script>';
+        }
+    } else {
+        $sql_insert = "INSERT INTO position (department_id, name) VALUES ('$dept', '$name')";
+        $result_insert = mysqli_query($conn, $sql_insert);
+        if ($result_insert) {
+            echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+        } else {
+            echo '<script>console.log("Error inserting record!");</script>';
+        }
+    }
+}
+
+if (isset($_POST['delete'])) {
+    $delete_id = $_POST['delete_id'];
+    $sql_delete = "DELETE FROM position WHERE id='$delete_id'";
+    $result_delete = mysqli_query($conn, $sql_delete);
+    if (!$result_delete) {
+        echo '<script>console.log("Error deleting record!");</script>';
+    } else {
+        echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+    }
+}
+?>
