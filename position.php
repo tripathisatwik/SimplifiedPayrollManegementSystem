@@ -116,10 +116,9 @@
             <form action="http://localhost/final/index.php?page=position" method="post" id="manage-position">
                 <div class="depleftup">Position</div>
                 <div class="depleftmid">
-                    <input type="hidden" name="id" value="<?php echo isset($edit_id) ? $edit_id : ''; ?>">
+                    <input type="hidden" name="id" >
                     <label class="control-label">Department</label><br>
-                    <select name="department">
-                        <option value=""></option>
+                    <select name="department" required>
                         <?php
                         $dept = $conn->query("SELECT * from department order by dname asc");
                         while ($row = $dept->fetch_assoc()) :
@@ -131,7 +130,7 @@
                     <input type="text" name="name" required>
                 </div>
                 <div class="depleftdown">
-                    <input type="submit" name="submit" value="<?php echo isset($edit_id) ? 'Update' : 'Save'; ?>">
+                    <input type="submit" name="submit">
                     <button type="button" onclick="reset()">Cancel</button>
                 </div>
             </form>
@@ -178,7 +177,7 @@ if (isset($_POST['submit'])) {
     $edit_id = $_POST['id'];
     $name = $_POST['name'];
     $dept = $_POST['department'];
-    if ($edit_id != '') {
+    if (!empty($edit_id)) {
         $sql_update = "UPDATE position SET department_id='$dept', name='$name' WHERE id='$edit_id'";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {

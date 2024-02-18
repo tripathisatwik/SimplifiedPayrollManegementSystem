@@ -1,242 +1,214 @@
-<html>
+<?php include 'dbconnect.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
 	<style>
-		/* Resetting some default margin */
-		body,
-		h1,
-		h2,
-		h3,
-		h4,
-		p,
-		ul,
-		li {
-			margin: 0;
-			padding: 0;
+		.center{
+			display: flex;
+		}
+		.container {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: flex-start;
 		}
 
-		/* Container Styles */
-		.container-fluid {
-			width: 100%;
-			margin-right: auto;
-			margin-left: auto;
-		}
-
-		/* Row Styles */
-		.row {
-			margin-right: -15px;
-			margin-left: -15px;
-		}
-
-		/* Button Styles */
-		.btn {
-			cursor: pointer;
-			display: inline-block;
-			padding: 10px 15px;
-			text-align: center;
-			text-decoration: none;
-			border-radius: 5px;
-		}
-
-		.btn-primary {
-			background-color: #007bff;
-			color: #fff;
-		}
-
-		.float-right {
-			float: right;
-		}
-
-		/* Card Styles */
-		.card {
-			border: 1px solid #ddd;
+		#manage-user {
+			max-width: 400px;
+			margin: 20px;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 			border-radius: 8px;
-			margin-bottom: 20px;
 		}
 
-		.card-body {
-			padding: 15px;
+		label {
+			display: block;
+			margin-bottom: 8px;
+			color: #333;
 		}
 
-		/* Table Styles */
+		input,
+		select {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 15px;
+			box-sizing: border-box;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #f8f8f8;
+			color: #333;
+		}
+
+		input[type="submit"],
+		button {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 12px 15px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s;
+		}
+
+		.row {
+			margin-top: 20px;
+		}
+
 		table {
 			width: 100%;
-			margin-bottom: 1rem;
-			color: #212529;
 			border-collapse: collapse;
+			margin-top: 20px;
 		}
 
-		.table-striped {
-			background-color: #f8f9fa;
-		}
-
-		.table-bordered {
-			border: 1px solid #ddd;
-		}
-
-		.table th,
-		.table td {
-			padding: 8px;
-			text-align: left;
-			border-bottom: 1px solid #ddd;
-		}
-
-		.table th {
-			background-color: #f8f9fa;
-		}
-
-		/* Dropdown Styles */
-		.dropdown-menu {
-			position: absolute;
-			top: 100%;
-			left: 0;
-			z-index: 1000;
-			display: none;
-			float: left;
-			min-width: 10rem;
-			padding: 0.5rem 0;
-			margin: 0.125rem 0 0;
-			font-size: 1rem;
-			color: #212529;
-			text-align: left;
-			list-style: none;
-			background-color: #fff;
-			background-clip: padding-box;
-			border: 1px solid rgba(0, 0, 0, 0.15);
-			border-radius: 0.25rem;
-		}
-
-		.dropdown-item {
-			display: block;
-			width: 100%;
-			padding: 0.25rem 1.5rem;
-			clear: both;
-			font-weight: 400;
-			color: #212529;
-			text-align: inherit;
-			white-space: nowrap;
-			background-color: transparent;
-			border: 0;
-		}
-
-		/* Script Styles */
-		.center {
-			text-align: center;
-		}
-
-		/* Additional Styles */
+		th,
 		td {
-			vertical-align: middle !important;
+			border: 1px solid #ddd;
+			padding: 12px;
+			text-align: left;
 		}
 
-		/* Custom Styles */
-		.btn-group {
-			position: relative;
-			display: inline-block;
-			vertical-align: middle;
+		th {
+			background-color: #4CAF50;
+			color: white;
 		}
 
-		.btn-group .btn {
-			border-radius: 0;
+		button[name="Cancel"],input[name="delete"] {
+			background-color: #f44336;
+			width: 100%;
 		}
 
-		.btn-group .dropdown-toggle-split {
-			padding-right: 0.5rem;
-			padding-left: 0.5rem;
-		}
 	</style>
-</head>
-<body>
-	<div class="container-fluid">
+	<script>
+		function reset() {
+			$('#manage-user').get(0).reset();
+		}
 
-		<div class="row">
-			<div class="col-lg-12">
-				<button class="btn btn-primary float-right btn-sm" id="new_user"><i class="fa fa-plus"></i> New user</button>
-			</div>
-		</div>
+		function confirmDelete() {
+			return confirm("Are you sure you want to delete this record?");
+		}
+
+		$(document).ready(function() {
+			$('button[data-id]').click(function() {
+				start_load();
+				var cat = $('#manage-user');
+				cat.get(0).reset();
+				cat.find("[name='id']").val($(this).attr('data-id'));
+				cat.find("[name='name']").val($(this).attr('data-name'));
+				cat.find("[name='username']").val($(this).attr('data-user'));
+				cat.find("[name='password']").val($(this).attr('data-pass'));
+				cat.find("[name='type']").val($(this).attr('data-type'));
+				end_load();
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div class="center">
+		<form id="manage-user" method="post">
+			<input type="hidden" name="id">
+			<label for="name">Name</label>
+			<input type="text" name="name" id="name" required>
+			<label for="username">Username</label>
+			<input type="text" name="username" id="username" required>
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" required>
+			<label for="type">User Type</label>
+			<select name="type" id="type" class="custom-select" required>
+				<option value="1">Admin</option>
+				<option value="2">Staff</option>
+			</select>
+			<input type="submit" name="submit">
+			<button type="submit" onclick="reset()" name="Cancel">Cancel</button>
+		</form>
 		<br>
 		<div class="row">
-			<div class="card col-lg-12">
-				<div class="card-body">
-					<table class="table-striped table-bordered col-md-12">
-						<thead>
-							<tr>
-								<th class="text-center">#</th>
-								<th class="text-center">Name</th>
-								<th class="text-center">Username</th>
-								<th class="text-center">Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							include 'db_connect.php';
-							$users = $conn->query("SELECT * FROM users order by name asc");
-							$i = 1;
-							while ($row = $users->fetch_assoc()) :
-							?>
-								<tr>
-									<td>
-										<?php echo $i++ ?>
-									</td>
-									<td>
-										<?php echo $row['name'] ?>
-									</td>
-									<td>
-										<?php echo $row['username'] ?>
-									</td>
-									<td>
-										<center>
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary">Action</button>
-												<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-													<span class="sr-only">Toggle Dropdown</span>
-												</button>
-												<div class="dropdown-menu">
-													<a class="dropdown-item edit_user" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Edit</a>
-													<div class="dropdown-divider"></div>
-													<a class="dropdown-item delete_user" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Delete</a>
-												</div>
-											</div>
-										</center>
-									</td>
-								</tr>
-							<?php endwhile; ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-		$('#new_user').click(function() {
-			uni_modal('New User', 'manage_user.php')
-		})
-		$('.edit_user').click(function() {
-			uni_modal('Edit User', 'manage_user.php?id=' + $(this).attr('data-id'))
-		})
-		$('.delete_user').click(function() {
-			_conf("Are you sure to delete this user?", "delete_user", [$(this).attr('data-id')])
-		})
+			<table border=1>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Action</th>
+				</tr>
+				<?php
+				$sql = "select * from users";
+				$result = mysqli_query($conn, $sql);
+				$num = mysqli_num_rows($result);
+				$sno = 1;
+				if ($num > 0) {
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo "<tr>";
+						echo "<td>" . $sno++ .  "</td>";
+						echo "<td>" . $row['name'] . "</td>";
+						echo "<td>" . $row['username'] . "</td>";
+				?>
+						<td>
+							<button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user">Edit</button>
 
-		function delete_user($id) {
-			start_load()
-			$.ajax({
-				url: 'ajax.php?action=delete_user',
-				method: 'POST',
-				data: {
-					id: $id
-				},
-				success: function(resp) {
-					if (resp == 1) {
-						alert_toast("Data successfully deleted", 'success')
-						setTimeout(function() {
-							location.reload()
-						}, 1500)
-
+							<form method="post" onsubmit="return confirmDelete()">
+								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+								<input type="submit" name="delete" value="Delete">
+							</form>
+						</td>
+						</tr>
+				<?php
 					}
 				}
-			})
-		}
-	</script>
+				?>
+			</table>
+		</div>
+	</div>
 </body>
+
 </html>
+<?php
+if (isset($_POST['submit'])) {
+	$edit_id = $_POST['id'];
+	$name = $_POST['name'];
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	$usertype = $_POST['type'];
+
+	if (!empty($edit_id)) {
+		if (!empty($password)) {
+			$hash = md5($password);
+			$sql_update = "UPDATE `users` SET `name`='$name', `username`='$username', `password`='$hash', `type`='$usertype' WHERE id=$edit_id";
+		} else {
+			$sql_update = "UPDATE `users` SET `name`='$name', `username`='$username', `type`='$usertype' WHERE id=$edit_id";
+		}
+		$result_update = mysqli_query($conn, $sql_update);
+
+		if ($result_update) {
+			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+		} else {
+			echo "Error updating record: " . mysqli_error($conn);
+		}
+	} else {
+		// Inserting a new user
+		$hash = md5($password);
+		$sql_insert = "INSERT INTO `users`(`name`, `username`, `password`, `type`) VALUES ('$name', '$username', '$hash', '$usertype')";
+		$result_insert = mysqli_query($conn, $sql_insert);
+
+		if ($result_insert) {
+			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+		} else {
+			echo "Error inserting record: " . mysqli_error($conn);
+		}
+	}
+}
+
+if (isset($_POST['delete'])) {
+	$delete_id = $_POST['delete_id'];
+	$sql_delete = "DELETE FROM users WHERE id=$delete_id";
+	$result_delete = mysqli_query($conn, $sql_delete);
+
+	if (!$result_delete) {
+		echo "Error deleting record: " . mysqli_error($conn);
+	} else {
+		echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+	}
+}
+?>

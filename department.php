@@ -1,3 +1,4 @@
+<?php include 'dbconnect.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -113,12 +114,12 @@
 			<form action="http://localhost/final/index.php?page=department" method="post" id="manage-department">
 				<div class="depleftup">Department</div>
 				<div class="depleftmid">
-					<input type="hidden" name="id" value="<?php echo isset($edit_id) ? $edit_id : ''; ?>">
+					<input type="hidden" name="id" >
 					<label class="control-label">Name</label><br>
 					<input type="text" name="name" required>
 				</div>
 				<div class="depleftdown">
-					<input type="submit" name="submit" value="<?php echo isset($edit_id) ? 'Update' : 'Save'; ?>">
+					<input type="submit" name="submit">
 					<button type="button" onclick="reset()">Cancel</button>
 				</div>
 			</form>
@@ -131,7 +132,6 @@
 					<th>Action</th>
 				</tr>
 				<?php
-				include 'dbconnect.php';
 				$sql = "select * from department";
 				$result = mysqli_query($conn, $sql);
 				$num = mysqli_num_rows($result);
@@ -143,9 +143,8 @@
 						echo "<td>" . $row['dname'] . "</td>";
 				?>
 						<td>
-							<button type="button" data-id="<?php echo $row['id'];
-															$edit_id = $row['id']; ?>" data-name="<?php echo $row['dname'] ?>">Edit</button>
-							
+							<button type="button" data-id="<?php echo $row['id']; ?>" 
+							data-name="<?php echo $row['dname'] ?>">Edit</button>
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
 								<input type="submit" name="delete" value="Delete">
@@ -164,14 +163,10 @@
 </html>
 
 <?php
-include 'dbconnect.php';
 if (isset($_POST['submit'])) {
 	$edit_id = $_POST['id'];
 	$name = $_POST['name'];
-	$sql = "select * from department  where id='$edit_id'";
-	$result = mysqli_query($conn, $sql);
-	$num = mysqli_num_rows($result);
-	if ($num > 0) {
+	if (!empty($edit_id)) {
 		$sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
 		$result_update = mysqli_query($conn, $sql_update);
 		if ($result_update) {
