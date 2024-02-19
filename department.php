@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-
+<title>Department</title>
 	<script>
 		function reset() {
 			$('#manage-department').get(0).reset();

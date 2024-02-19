@@ -10,10 +10,6 @@ Class Action {
     
     $this->db = $conn;
 	}
-	function __destruct() {
-	    $this->db->close();
-	    ob_end_flush();
-	}
 
 	function save_settings(){
 		extract($_POST);
@@ -44,42 +40,6 @@ Class Action {
 
 			return 1;
 				}
-	}
-
-	
-	function save_employee(){
-		extract($_POST);
-		$data =" firstname='$firstname' ";
-		$data .=", middlename='$middlename' ";
-		$data .=", lastname='$lastname' ";
-		$data .=", position_id='$position_id' ";
-		$data .=", department_id='$department_id' ";
-		$data .=", salary='$salary' ";
-		
-
-		if(empty($id)){
-			$i= 1;
-			while($i == 1){
-			$e_num=date('Y') .'-'. mt_rand(1,9999);
-				$chk  = $this->db->query("SELECT * FROM employee where employee_no = '$e_num' ")->num_rows;
-				if($chk <= 0){
-					$i = 0;
-				}
-			}
-			$data .=", employee_no='$e_num' ";
-
-			$save = $this->db->query("INSERT INTO employee set ".$data);
-		}else{
-			$save = $this->db->query("UPDATE employee set ".$data." where id=".$id);
-		}
-		if($save)
-			return 1;
-	}
-	function delete_employee(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM employee where id = ".$id);
-		if($delete)
-			return 1;
 	}
 
 	function save_employee_allowance(){
@@ -122,37 +82,6 @@ Class Action {
 	function delete_employee_deduction(){
 		extract($_POST);
 		$delete = $this->db->query("DELETE FROM employee_deductions where id = ".$id);
-		if($delete)
-			return 1;
-	}
-	function save_employee_attendance(){
-		extract($_POST);
-		
-		foreach($employee_id as $k =>$v){
-			$datetime_log[$k] =date("Y-m-d H:i",strtotime($datetime_log[$k]));
-			$data =" employee_id='$employee_id[$k]' ";
-			$data .=", log_type = '$log_type[$k]' ";
-			$data .=", datetime_log = '$datetime_log[$k]' ";
-			$save[] = $this->db->query("INSERT INTO attendance set ".$data);
-		}
-
-		if(isset($save))
-			return 1;
-	}
-	function delete_employee_attendance(){
-		extract($_POST);
-		$date = explode('_',$id);
-		$dt = date("Y-m-d",strtotime($date[1]));
- 
-		$delete = $this->db->query("DELETE FROM attendance where employee_id = '".$date[0]."' and date(datetime_log) ='$dt' ");
-		if($delete)
-			return 1;
-	}
-	function delete_employee_attendance_single(){
-		extract($_POST);
-		
- 
-		$delete = $this->db->query("DELETE FROM attendance where id = $id ");
 		if($delete)
 			return 1;
 	}

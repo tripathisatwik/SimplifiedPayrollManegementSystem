@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+<title>Position</title>
     <script>
         function reset() {
             $('#manage-position').get(0).reset();

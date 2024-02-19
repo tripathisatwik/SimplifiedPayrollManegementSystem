@@ -9,16 +9,6 @@ if($action == "save_settings"){
 	if($save)
 		echo $save;
 }
-if($action == "save_employee"){
-	$save = $crud->save_employee();
-	if($save)
-		echo $save;
-}
-if($action == "delete_employee"){
-	$save = $crud->delete_employee();
-	if($save)
-		echo $save;
-}
 
 if($action == "save_employee_allowance"){
 	$save = $crud->save_employee_allowance();

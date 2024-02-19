@@ -1,6 +1,7 @@
 <?php include 'dbconnect.php' ?>
 <html>
 <head>
+<title>Home</title>
     <style>
         .text{
             background-color: lightgray;

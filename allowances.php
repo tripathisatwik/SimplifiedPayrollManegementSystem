@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-
+<title>Allowances</title>
 	<script>
 		function reset() {
 			$('#manage-allowance').get(0).reset();

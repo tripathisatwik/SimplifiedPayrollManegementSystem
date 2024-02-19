@@ -3,82 +3,93 @@
 <html lang="en">
 
 <head>
+	<title>User</title>
 	<style>
-		.center{
+		.center {
 			display: flex;
-		}
-		.container {
-			display: flex;
-			flex-direction: row;
 			justify-content: space-between;
-			align-items: flex-start;
+			align-items: center;
+			width: 80%;
+			margin: auto;
+			padding: 20px;
 		}
 
-		#manage-user {
+		.inputform {
+			display: flex;
+			flex-direction: column;
 			max-width: 400px;
-			margin: 20px;
 			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 			background-color: #fff;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-			border-radius: 8px;
 		}
 
 		label {
-			display: block;
-			margin-bottom: 8px;
-			color: #333;
+			margin-bottom: 5px;
 		}
 
-		input,
-		select {
-			width: 100%;
-			padding: 10px;
-			margin-bottom: 15px;
-			box-sizing: border-box;
-			border: 1px solid #ccc;
-			border-radius: 4px;
-			background-color: #f8f8f8;
-			color: #333;
+		select,
+		input[type="text"],
+		input[type="number"] {
+			margin-bottom: 10px;
+			padding: 8px;
 		}
 
-		input[type="submit"],
+		button[name="Cancel"],
+		input[name="delete"] {
+			background-color: #f44336;
+		}
+
+		input[name="submit"],
 		button {
-			background-color: #4CAF50;
-			color: #fff;
-			padding: 12px 15px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			font-size: 16px;
-			transition: background-color 0.3s;
+			background-color: #4caf50;
 		}
 
-		.row {
-			margin-top: 20px;
+		input[name="submit"],
+		input[name="delete"],
+		button {
+			padding: 10px;
+			cursor: pointer;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			margin-right: 10px;
 		}
+
+
 
 		table {
 			width: 100%;
 			border-collapse: collapse;
-			margin-top: 20px;
+			margin-left: 20px;
 		}
 
 		th,
 		td {
 			border: 1px solid #ddd;
-			padding: 12px;
+			padding: 8px;
 			text-align: left;
 		}
 
 		th {
-			background-color: #4CAF50;
+			background-color: #4caf50;
 			color: white;
 		}
 
-		button[name="Cancel"],input[name="delete"] {
-			background-color: #f44336;
-			width: 100%;
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
 		}
+
+		tr:hover {
+			background-color: #ddd;
+		}
+
+		.action {
+			display: flex;
+			gap: 5px;
+		}
+	</style>
 
 	</style>
 	<script>
@@ -145,7 +156,7 @@
 						echo "<td>" . $row['name'] . "</td>";
 						echo "<td>" . $row['username'] . "</td>";
 				?>
-						<td>
+						<td class="action">
 							<button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user">Edit</button>
 
 							<form method="post" onsubmit="return confirmDelete()">

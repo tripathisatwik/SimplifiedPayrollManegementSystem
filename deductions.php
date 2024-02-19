@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-
+<title>Deductions</title>
 	<script>
 		function reset() {
 			$('#manage-deduction').get(0).reset();
@@ -85,7 +85,6 @@
 			color: white;
 			border: none;
 		}
-
 
 		table {
 			width: 100%;
