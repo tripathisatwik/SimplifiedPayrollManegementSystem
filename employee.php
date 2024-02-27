@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-<title>Employee</title>
+    <title>Employee</title>
     <style>
         .center {
             display: flex;
@@ -87,6 +87,7 @@
             display: flex;
             gap: 5px;
         }
+
     </style>
     <script>
         function reset() {
@@ -195,7 +196,12 @@
                     ?>
                         <td class="action">
                             <button name="edit" id="edit_empolyee" data-id="<?php echo $row['id']; ?>" data-employee_no="<?php echo $row['employee_no'] ?>" data-firstname="<?php echo $row['firstname'] ?>" data-middlename="<?php echo $row['middlename'] ?>" data-lastname="<?php echo $row['lastname'] ?>" data-department="<?php echo $row['department_id'] ?>" data-position="<?php echo $row['position_id'] ?>" data-salary="<?php echo $row['salary'] ?>">Edit</button>
-
+                            <button class="manage_employee" id="manage_employee" type="button">
+                                <a href="http://localhost/final/index.php?page=manage_employee">Manage</a>
+                                <?php
+                                $_SESSION['view_id'] = $row['id'];
+                                ?>
+                            </button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
                                 <input type="submit" name="delete" value="Delete">
