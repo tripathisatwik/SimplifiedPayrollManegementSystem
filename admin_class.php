@@ -42,49 +42,6 @@ Class Action {
 				}
 	}
 
-	function save_employee_allowance(){
-		extract($_POST);
-		
-		foreach($allowance_id as $k =>$v){
-			$data =" employee_id='$employee_id' ";
-			$data .=", allowance_id = '$allowance_id[$k]' ";
-			$data .=", type = '$type[$k]' ";
-			$data .=", amount = '$amount[$k]' ";
-			$data .=", effective_date = '$effective_date[$k]' ";
-			$save[] = $this->db->query("INSERT INTO employee_allowances set ".$data);
-		}
-
-		if(isset($save))
-			return 1;
-	}
-	function delete_employee_allowance(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM employee_allowances where id = ".$id);
-		if($delete)
-			return 1;
-	}
-
-	function save_employee_deduction(){
-		extract($_POST);
-		
-		foreach($deduction_id as $k =>$v){
-			$data =" employee_id='$employee_id' ";
-			$data .=", deduction_id = '$deduction_id[$k]' ";
-			$data .=", type = '$type[$k]' ";
-			$data .=", amount = '$amount[$k]' ";
-			$data .=", effective_date = '$effective_date[$k]' ";
-			$save[] = $this->db->query("INSERT INTO employee_deductions set ".$data);
-		}
-
-		if(isset($save))
-			return 1;
-	}
-	function delete_employee_deduction(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM employee_deductions where id = ".$id);
-		if($delete)
-			return 1;
-	}
 	function save_payroll(){
 		extract($_POST);
 		$data =" date_from='$date_from' ";
