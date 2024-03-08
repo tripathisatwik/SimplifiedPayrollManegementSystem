@@ -44,7 +44,7 @@
                     <large><b>Simplified Payroll Management System</b></large>
                 </div>
                 <div class="right">
-                    <a href="logout.php" class="text-white"><?php echo $_SESSION['login_name'] ?> </a>
+                    <a href="logout.php" > <?php echo ucfirst($_SESSION['login_name']) ?> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                 </div>
             </div>
         </div>

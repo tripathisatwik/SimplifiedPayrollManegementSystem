@@ -154,11 +154,11 @@
 
 				?>
 						<td>
-							<button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['deduction'] ?>" data-des="<?php echo $row['description']; ?>">Edit</button>
+							<button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['deduction'] ?>" data-des="<?php echo $row['description']; ?>"><i class="fa-solid fa-pen-to-square"></i></button>
 
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-								<input type="submit" name="delete" value="Delete">
+								<button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
 							</form>
 						</td>
 						</tr>

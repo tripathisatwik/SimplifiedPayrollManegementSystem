@@ -8,6 +8,7 @@ $id = $_SESSION['view_id'];
 ?>
 
 <html>
+
 <head>
     <style>
         .lower {
@@ -16,8 +17,12 @@ $id = $_SESSION['view_id'];
         }
     </style>
     <script>
-        function reset() {
-            $('#manage-user').get(0).reset();
+        function areset() {
+            $('#manage-allowance').get(0).reset();
+        }
+
+        function dreset() {
+            $('#manage-deduction').get(0).reset();
         }
 
         function confirmDelete() {
@@ -25,29 +30,29 @@ $id = $_SESSION['view_id'];
         }
 
         $(document).ready(function() {
-            $('button[data-id]').click(function() {
+            $('button[name="edit_allowance"]').click(function() {
                 start_load();
+
                 var cat = $('#manage-allowance');
                 cat.get(0).reset();
                 cat.find("[name='id']").val($(this).attr('data-id'));
-                cat.find("[name='name']").val($(this).attr('data-name'));
-                cat.find("[name='username']").val($(this).attr('data-user'));
-                cat.find("[name='password']").val($(this).attr('data-pass'));
+                cat.find("[name='allowance']").val($(this).attr('data-name'));
                 cat.find("[name='type']").val($(this).attr('data-type'));
+                cat.find("[name='amount']").val($(this).attr('data-amount'));
+
                 end_load();
             });
-        });
 
-        $(document).ready(function() {
-            $('button[data-id]').click(function() {
+            $('button[name="edit_deduction"]').click(function() {
                 start_load();
+
                 var cat = $('#manage-deduction');
                 cat.get(0).reset();
                 cat.find("[name='id']").val($(this).attr('data-id'));
-                cat.find("[name='name']").val($(this).attr('data-name'));
-                cat.find("[name='username']").val($(this).attr('data-user'));
-                cat.find("[name='password']").val($(this).attr('data-pass'));
+                cat.find("[name='deduction']").val($(this).attr('data-name'));
                 cat.find("[name='type']").val($(this).attr('data-type'));
+                cat.find("[name='amount']").val($(this).attr('data-amount'));
+
                 end_load();
             });
         });
@@ -79,7 +84,8 @@ $id = $_SESSION['view_id'];
                 $result1 = mysqli_query($conn, $allowanceQuery);
                 ?>
                 <div class="form">
-                    <form id="manage-allowance" method="post">
+                    <form id="manage-allowance" method="post" action="http://localhost/final/index.php?page=manage_employee">
+                        <input type="hidden" id="aid">
                         <label for="allowance">Allowance</label>
                         <select name="allowance" id="allowance" required>
                             <?php while ($row1 = $result1->fetch_assoc()) { ?>
@@ -94,13 +100,14 @@ $id = $_SESSION['view_id'];
                         </select>
                         <label for="amount">Amount:</label>
                         <input type="number" name="aamount" id="aamount" required>
-                        <input type="submit" name="allowances">
+                        <input type="submit" name="add_allowances" value="Add Allowance">
+                        <button onclick="areset()">Cancel</button>
                     </form>
                 </div>
                 <div class="data">
                     <?php
                     $asno = 1;
-                    $allowanceQuery = "SELECT * FROM `employee_allowances` where employee_id = " . $id;
+                    $allowanceQuery = "SELECT * FROM `employee_allowances` INNER JOIN allowances on allowance_id=allowances.id where employee_id = " . $id;
                     $result2 = mysqli_query($conn, $allowanceQuery);
                     if ($row2 = $result2->fetch_assoc()) {
                     ?>
@@ -126,7 +133,7 @@ $id = $_SESSION['view_id'];
                                 </td>
                                 <td><?php echo $row2['amount'] ?></td>
                                 <td>
-                                    <button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user">Edit</button>
+                                    <button name="edit" id="edit_allowance" data-id="<?php echo $row2['allowance_id'] ?>" data-name="<?php echo $row2['allowance'] ?>" data-type="<?php echo $row2['type']; ?>" data-amount="<?php echo $row2['amount']; ?>">Edit</button>
                                     <form method="post" onsubmit="return confirmDelete()">
                                         <input type="hidden" name="delete_id" value="<?php echo $row2['id']; ?>">
                                         <input type="submit" name="delete" value="Delete">
@@ -145,7 +152,8 @@ $id = $_SESSION['view_id'];
                 $result3 = mysqli_query($conn, $deductionQuery);
                 ?>
                 <div class="form">
-                    <form id="manage-deduction" method="post">
+                    <form id="manage-deduction" method="post" action="http://localhost/final/index.php?page=manage_employee">
+                        <input type="hidden" id="did">
                         <label for="deduction">Deductions</label>
                         <select name="deduction" id="deduction">
                             <?php while ($row3 = $result3->fetch_assoc()) { ?>
@@ -160,13 +168,14 @@ $id = $_SESSION['view_id'];
                         </select>
                         <label for="amount">Amount:</label>
                         <input type="number" name="damount" id="damount">
-                        <input type="submit" name="deductions">
+                        <input type="submit" name="add_deductions" value="Add Deduction">
+                        <button onclick="dreset()">Cancel</button>
                     </form>
                 </div>
                 <div class="data">
                     <?php
                     $dsno = 1;
-                    $deductionQuery = "SELECT * FROM `employee_deductions` where employee_id =" . $id;
+                    $deductionQuery = "SELECT * FROM `employee_deductions` INNER JOIN deductions on deduction_id = deductions.id where employee_id =" . $id;
                     $result4 = mysqli_query($conn, $deductionQuery);
                     if ($row4 = $result4->fetch_assoc()) {
                     ?>
@@ -185,14 +194,15 @@ $id = $_SESSION['view_id'];
                                         echo 'Monthly';
                                     } else if ($row4['type'] == 2) {
                                         echo 'Semi-Monthly';
-                                    } else if ($row4['type'] == 1) {
+                                    } else if ($row4['type'] == 3) {
                                         echo 'Once';
                                     }
                                     ?>
                                 </td>
                                 <td><?php echo $row4['amount'] ?></td>
                                 <td>
-                                    <button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user">Edit</button>
+                                   <button name="edit" id="edit_deduction" data-id="<?php echo $row4['deduction_id'] ?>" data-name="<?php echo $row4['deduction'] ?>" data-type="<?php echo $row4['type']; ?>" data-amount="<?php echo $row4['amount']; ?>">Edit</button>
+
                                     <form method="post" onsubmit="return confirmDelete()">
                                         <input type="hidden" name="delete_id" value="<?php echo $row4['id']; ?>">
                                         <input type="submit" name="delete" value="Delete">
@@ -210,30 +220,30 @@ $id = $_SESSION['view_id'];
 </html>
 
 <?php
-if (isset($_POST['allowances'])) {
+if (isset($_POST['add_allowances'])) {
     $allowanceid = $_POST['allowance'];
     $allowancetype = $_POST['atype'];
     $allowanceamount = $_POST['aamount'];
     $sql_insert = "INSERT INTO `employee_allowances`(`employee_id`, `allowance_id`, `type`, `amount`, `effective_date`, `date_created`) VALUES ($id, $allowanceid, $allowancetype, $allowanceamount, NOW(), NOW())";
     $result_insert = mysqli_query($conn, $sql_insert);
     if ($result_insert) {
-        echo '<script>window.location="http://localhost/final/index.php?page=view_employee"</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=manage_employee"</script>';
     } else {
         echo "Error inserting record: " . mysqli_error($conn);
     }
-} elseif (isset($_POST['deductions'])) {
+} elseif (isset($_POST['add_deductions'])) {
     $deductionid = $_POST['deduction'];
     $deductiontype = $_POST['dtype'];
     $deductionamount = $_POST['damount'];
     $sql_insert = "INSERT INTO `employee_deductions`(`employee_id`, `deduction_id`, `type`, `amount`, `effective_date`, `date_created`) VALUES ($id, $deductionid, $deductiontype, $deductionamount, NOW(), NOW())";
     $result_insert = mysqli_query($conn, $sql_insert);
     if ($result_insert) {
-        echo '<script>window.location="http://localhost/final/index.php?page=view_employee"</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=manage_employee"</script>';
     } else {
         echo "Error inserting record: " . mysqli_error($conn);
     }
 }
-if (isset($_POST['delete'])) {
+if (isset($_POST['delete_allowance'])) {
     $delete_id = $_POST['delete_id'];
     $sql_delete = "DELETE FROM `employee_allowances` WHERE id = $delete_id";
     $result_delete = mysqli_query($conn, $sql_delete);
@@ -241,7 +251,18 @@ if (isset($_POST['delete'])) {
     if (!$result_delete) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
-        echo '<script>window.location="http://localhost/final/index.php?view_employee"</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=manage_employee"</script>';
+    }
+}
+if (isset($_POST['delete_deduction'])) {
+    $delete_id = $_POST['delete_id'];
+    $sql_delete = "DELETE FROM `employee_deductions` WHERE id = $delete_id";
+    $result_delete = mysqli_query($conn, $sql_delete);
+
+    if (!$result_delete) {
+        echo "Error deleting record: " . mysqli_error($conn);
+    } else {
+        echo '<script>window.location="http://localhost/final/index.php?page=manage_employee"</script>';
     }
 }
 ?>

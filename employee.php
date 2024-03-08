@@ -195,16 +195,16 @@
                         echo  "<td>" . $row["salary"] . "</td>";
                     ?>
                         <td class="action">
-                            <button name="edit" id="edit_empolyee" data-id="<?php echo $row['id']; ?>" data-employee_no="<?php echo $row['employee_no'] ?>" data-firstname="<?php echo $row['firstname'] ?>" data-middlename="<?php echo $row['middlename'] ?>" data-lastname="<?php echo $row['lastname'] ?>" data-department="<?php echo $row['department_id'] ?>" data-position="<?php echo $row['position_id'] ?>" data-salary="<?php echo $row['salary'] ?>">Edit</button>
+                            <button name="edit" id="edit_empolyee" data-id="<?php echo $row['id']; ?>" data-employee_no="<?php echo $row['employee_no'] ?>" data-firstname="<?php echo $row['firstname'] ?>" data-middlename="<?php echo $row['middlename'] ?>" data-lastname="<?php echo $row['lastname'] ?>" data-department="<?php echo $row['department_id'] ?>" data-position="<?php echo $row['position_id'] ?>" data-salary="<?php echo $row['salary'] ?>"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button class="manage_employee" id="manage_employee" type="button">
-                                <a href="http://localhost/final/index.php?page=manage_employee">Manage</a>
+                                <a href="http://localhost/final/index.php?page=manage_employee"><i class="fa-solid fa-list-check"></i></a>
                                 <?php
                                 $_SESSION['view_id'] = $row['id'];
                                 ?>
                             </button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <input type="submit" name="delete" value="Delete">
+                                <button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
                             </form>
                         </td>
                     <?php

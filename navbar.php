@@ -2,7 +2,6 @@
 
 <head>
 <style>
-		/* Reset some default styles */
 		body,
 		h1,
 		h2,
@@ -14,21 +13,16 @@
 			padding: 0;
 		}
 
-		/* Basic styling for the sidebar */
 		#sidebar {
 			position: fixed;
 			left: 0;
 			top: 3.5rem;
 			height: 100%;
 			width: 200px;
-			/* Adjust the width as needed */
 			background-color: #333;
-			/* Dark background color */
 			color: #fff;
-			/* Text color */
 		}
 
-		/* Styling for the sidebar list items */
 		.sidebar-list {
 			padding: 20px;
 		}
@@ -43,23 +37,24 @@
 
 		.sidebar-list a:hover {
 			background-color: #555;
-			/* Hover color */
 		}
 
-		/* Styling for the active navigation item */
 		.sidebar-list a.active {
 			background-color: #007bff;
-			/* Active item color */
 		}
 
-		/* Styling for icons within the navigation items */
+
 		.icon-field {
 			margin-right: 10px;
 		}
 
-		/* Optional: Adjustments for better readability */
 		body {
 			font-family: 'Arial', sans-serif;
+		}
+		.footer{
+			position: fixed;
+            bottom: 0;
+			padding: 15px;
 		}
 	</style>
 </head>
@@ -73,13 +68,14 @@
             <a href="index.php?page=employee" class="nav-item nav-employee"><span class='icon-field'><i class="fa fa-user-tie"></i></span> Employee List</a>
             <a href="index.php?page=department" class="nav-item nav-department"><span class='icon-field'><i class="fa fa-columns"></i></span> Depatment List</a>
             <a href="index.php?page=position" class="nav-item nav-position"><span class='icon-field'><i class="fa fa-user-tie"></i></span> Position List</a>
-            <a href="index.php?page=allowances" class="nav-item nav-allowances"><span class='icon-field'><i class="fa fa-list"></i></span> Allowance List</a>
+            <a href="index.php?page=allowances" class="nav-item nav-allowances"><span class='icon-field'><i class="fa fa-money-bill-wave"></i></span> Allowance List</a>
             <a href="index.php?page=deductions" class="nav-item nav-deductions"><span class='icon-field'><i class="fa fa-money-bill-wave"></i></span> Deduction List</a>
 
             <?php if ($_SESSION['login_type'] == 1) : ?>
                 <a href="index.php?page=users" class="nav-item nav-users"><span class='icon-field'><i class="fa fa-users"></i></span> Users</a>
             <?php endif; ?>
         </div>
+		<div class="footer">&copy; Satwik Tripathi - <?php echo date("Y");?></div>
     </nav>
     <script>
         $('.nav-<?php echo isset($_GET['page']) ? $_GET['page'] : '' ?>').addClass('active')

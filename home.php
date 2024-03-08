@@ -1,22 +1,37 @@
 <?php include 'dbconnect.php' ?>
 <html>
+
 <head>
-<title>Home</title>
+    <title>Home</title>
     <style>
-        .text{
-            background-color: lightgray;
-            padding: 1rem;
-            border-radius: 5%;
+        .time {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .text {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
+
 <body>
+    <div class="time">
+        Current Date/Time: <?php echo (strftime("%m/%d/%Y %H:%M")); ?></p>
+    </div>
     <div class="text">
-        <?php 
-        echo "Welcome back " . $_SESSION['login_name'] . "!"  ;
+        <?php
+        echo "Welcome back " . ucfirst($_SESSION['login_name']) . "!";
         echo '<br>';
-        echo "What are you gonna do today?"
+        echo "What are we gonna do today?"
         ?>
     </div>
 </body>
+
 </html>
