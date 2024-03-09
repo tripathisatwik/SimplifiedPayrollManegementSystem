@@ -2,7 +2,6 @@
 
 <head>
     <style>
-        /* Style for the fixed-top navbar */
         .navbar {
             background-color: #87CEEB;
             padding: 0;
@@ -18,10 +17,12 @@
             text-decoration: none;
             color: #fff;
         }
-        .float{
+
+        .float {
             display: flex;
             padding: 0.5rem;
         }
+
         .left {
             float: left;
             padding-left: 1rem;
@@ -31,7 +32,57 @@
             float: right;
             padding-right: 4rem;
         }
+
+        .dropbtn {
+            background-color: transparent;
+            border: none;
+            color: black;
+            padding: 5px;
+            cursor: pointer;
+        } 
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
+        }
     </style>
+    <script>
+        function toggleDropdown() {
+            var dropdownContent = document.getElementById("dropdownContent");
+            dropdownContent.classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -43,8 +94,14 @@
                 <div class="left">
                     <large><b>Simplified Payroll Management System</b></large>
                 </div>
+
                 <div class="right">
-                    <a href="logout.php" > <?php echo ucfirst($_SESSION['login_name']) ?> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                    <div class="dropdown">
+                        <button  onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo ucfirst($_SESSION['login_name']) ?> <i class="fa-solid fa-caret-down"></i></button>
+                        <div id="dropdownContent" class="dropdown-content">
+                            <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
