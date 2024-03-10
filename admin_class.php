@@ -11,37 +11,6 @@ Class Action {
     $this->db = $conn;
 	}
 
-	function save_settings(){
-		extract($_POST);
-		$data = " name = '".str_replace("'","&#x2019;",$name)."' ";
-		$data .= ", email = '$email' ";
-		$data .= ", contact = '$contact' ";
-		$data .= ", about_content = '".htmlentities(str_replace("'","&#x2019;",$about))."' ";
-		if($_FILES['img']['tmp_name'] != ''){
-						$fname = strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-						$move = move_uploaded_file($_FILES['img']['tmp_name'],'assets/img/'. $fname);
-					$data .= ", cover_img = '$fname' ";
-
-		}
-		
-		// echo "INSERT INTO system_settings set ".$data;
-		$chk = $this->db->query("SELECT * FROM system_settings");
-		if($chk->num_rows > 0){
-			$save = $this->db->query("UPDATE system_settings set ".$data);
-		}else{
-			$save = $this->db->query("INSERT INTO system_settings set ".$data);
-		}
-		if($save){
-		$query = $this->db->query("SELECT * FROM system_settings limit 1")->fetch_array();
-		foreach ($query as $key => $value) {
-			if(!is_numeric($key))
-				$_SESSION['setting_'.$key] = $value;
-		}
-
-			return 1;
-				}
-	}
-
 	function save_payroll(){
 		extract($_POST);
 		$data =" date_from='$date_from' ";
@@ -66,12 +35,7 @@ Class Action {
 		if($save)
 			return 1;
 	}
-	function delete_payroll(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM payroll where id = ".$id);
-		if($delete)
-			return 1;
-	}
+
 	function calculate_payroll(){
 		extract($_POST);
 		$am_in = "08:00";

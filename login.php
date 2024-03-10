@@ -3,15 +3,13 @@
 <head>
     <title>User Login</title>
     <style>
-        /* userlogin.css */
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
         }
 
-        .extra {
+        .main {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,12 +18,24 @@
         }
 
         .outer {
+            display: flex;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            overflow: hidden;
+        }
+
+        .left {
+            flex: 1;
             text-align: center;
-            width: 300px;
+            padding: 20px;
+            background-color: #87CEEB;
+        }
+
+        .right {
+            flex: 1;
+            padding: 50px;
+            text-align: center;
         }
 
         .userlogin h2 {
@@ -62,43 +72,45 @@
             background-color: #0056b3;
         }
 
-        .usersignup {
-            text-align: center;
-            margin-top: 20px;
+        .header {
+            background-color: white;
+            padding: 10px;
+            margin-top: 50px;
+            border-radius: 5px;
         }
 
-        .usersignup img {
-            paddding: 20px;
-            max-width: 100px;
-            max-height: 100px;
-            margin-bottom: 10px;
-        }
-
-        .usersignup h3 a {
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
-        }
-
-        .usersignup h3 a:hover {
-            color: #0056b3;
+        .left-body {
+            margin-top: 150px;
         }
     </style>
 </head>
 
 <body>
-    <div class="extra">
+    <div class="main">
         <div class="outer">
-            <div class="userlogin">
-                <form action="" method="POST">
-                    <h2>LOGIN</h2>
-                    <p>Enter your Username and Password</p>
-                    USERNAME <br> <input type="text" name="username" placeholder="Enter your Username">
-                    <br>
-                    PASSWORD <br> <input type="password" name="password" placeholder="Enter your Password">
-                    <br>
-                    <input type="submit" name="submit" value="LogIn">
-                </form>
+            <div class="left">
+                <div class="header">
+                    <h2>Simplified Payroll Management System</h2>
+                </div>
+                <div class="left-body">
+                    <small>
+                        <p>Designed & Developed By: Satwik Tripathi</p>
+                        <p>All Rights Reserved &copy;Satwik Tripathi - <?php echo date("Y"); ?></p>
+                    </small>
+                </div>
+            </div>
+            <div class="right">
+                <div class="userlogin">
+                    <form action="" method="POST">
+                        <h2>LOGIN</h2>
+                        <p>Enter your Username and Password</p>
+                        USERNAME <br> <input type="text" name="username" placeholder="Enter your Username">
+                        <br>
+                        PASSWORD <br> <input type="password" name="password" placeholder="Enter your Password">
+                        <br>
+                        <input type="submit" name="submit" value="LogIn">
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -120,15 +132,13 @@
             }
             $_SESSION["login_name"] = $name;
             $_SESSION['login_id'] = $username;
-            $_SESSION['login_type']= $type;
+            $_SESSION['login_type'] = $type;
             header("Location:http://localhost/final/index.php");
-
         } else {
             echo "invalid username or password";
         }
     }
     ?>
-
 </body>
 
 </html>

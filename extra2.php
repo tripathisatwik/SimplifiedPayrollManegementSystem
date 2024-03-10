@@ -1,271 +1,220 @@
-<?php include 'dbconnect.php'; ?>
+<?php include "dbconnect.php" ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payroll</title>
     <style>
-        .depmain {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px;
-        }
-
-        .depleft,
-        .depright {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            /* Add border around depleft */
-        }
-
-        .depleftup {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .depleftmid,
-        .depleftdown {
-            margin-bottom: 10px;
-        }
-
-        .depleftmid textarea {
+        .container-fluid {
+            margin: 0;
+            padding: 0;
             width: 100%;
-            padding: 5px;
             box-sizing: border-box;
-            margin-bottom: 10px;
         }
 
-        .depleftdown {
-            display: flex;
-            align-items: center;
+        .col-lg-12 {
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .depleftdown input {
-            padding: 8px;
-            margin-right: 10px;
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 0.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.75rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
         }
 
-        .depleftdown button {
-            padding: 8px;
-            margin-right: 10px;
-            cursor: pointer;
-            background-color: red;
-            color: white;
-            border: none;
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
         }
 
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.2rem;
+        }
+
+        .badge-primary {
+            color: #fff;
+            background-color: #007bff;
+        }
+
+        .badge-success {
+            color: #fff;
+            background-color: #28a745;
+        }
 
         table {
             width: 100%;
+            margin-bottom: 1rem;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
         th,
         td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 0.75rem;
             text-align: left;
+            border-bottom: 1px solid #ccc;
         }
 
-        th {
-            background-color: #f2f2f2;
-        }
-
-        form {
-            margin: 0;
-        }
-
-        /* The Modal (background) */
-        .modal {
-            display: none;
-            /* Hidden by default */
+        /* Example styling for custom modal */
+        .custom-modal {
             position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Modal Content */
         .modal-content {
-            background-color: #fefefe;
-            margin: auto;
+            background: #fff;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            border-radius: 5px;
+            position: relative;
         }
 
-        /* The Close Button */
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
+            font-size: 20px;
         }
     </style>
-    <script>
-        function reset() {
-            $('#manage-department').get(0).reset();
-        }
-
-        function confirmDelete() {
-            return confirm("Are you sure you want to delete this record?");
-        }
-        $(document).ready(function() {
-            $('button[data-id]').click(function() {
-                start_load();
-                var cat = $('#manage-department');
-                cat.get(0).reset();
-                cat.find("[name='id']").val($(this).attr('data-id'));
-                cat.find("[name='name']").val($(this).attr('data-name'));
-                end_load();
-            });
-        });
-        // Get the modal
-        var modal = document.getElementById("myModal");
-
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
 </head>
 
 <body>
-    <button id="myBtn">New Department</button>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="depleft">
-                <form action="http://localhost/final/index.php?page=department" method="post" id="manage-department">
-                    <div class="depleftup">Department</div>
-                    <div class="depleftmid">
-                        <input type="hidden" name="id">
-                        <label class="control-label">Name</label><br>
-                        <input type="text" name="name" required>
-                    </div>
-                    <div class="depleftdown">
-                        <input type="submit" name="submit">
-                        <button type="button" onclick="reset()">Cancel</button>
-                    </div>
-                </form>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <span><b>Payroll List</b></span>
+            <button class="btn btn-primary btn-sm btn-block col-md-3 float-right" type="button" id="new_payroll_btn">Add Payroll</button>
         </div>
-
-    </div>
-    <div class="depright">
-        <table border=1>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Action</th>
-            </tr>
-            <?php
-            $sql = "select * from department";
-            $result = mysqli_query($conn, $sql);
-            $num = mysqli_num_rows($result);
-            $sno = 1;
-            if ($num > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $sno++ . "</td>";
-                    echo "<td>" . $row['dname'] . "</td>";
-            ?>
-                    <td>
-                        <button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['dname'] ?>">Edit</button>
-                        <form method="post" onsubmit="return confirmDelete()">
-                            <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                            <input type="submit" name="delete" value="Delete">
-                        </form>
-                    </td>
+        <div class="card-body">
+            <table id="table" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Ref No</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
-            <?php
-                }
-            }
-            ?>
-        </table>
+                </thead>
+                <tbody>
+                    <?php
+                    $payroll = $conn->query("SELECT * FROM payroll order by date(date_from) desc") or die(mysqli_error($conn));
+                    while ($row = $payroll->fetch_array()) :
+                    ?>
+                        <tr>
+                            <td><?php echo $row['ref_no'] ?></td>
+                            <td><?php echo date("M d, Y", strtotime($row['date_from'])) ?></td>
+                            <td><?php echo date("M d, Y", strtotime($row['date_to'])) ?></td>
+                            <td class="text-center">
+                                <?php if ($row['status'] == 0) : ?>
+                                    <span>New</span>
+                                <?php else : ?>
+                                    <span>Calculated</span>
+                                <?php endif ?>
+                            </td>
+                            <td>
+                                <center>
+                                    <?php if ($row['status'] == 0) : ?>
+                                        <button class="calculate_payroll" data-id="<?php echo $row['id'] ?>">Calculate</button>
+                                    <?php else : ?>
+                                        <button class="view_payroll" data-id="<?php echo $row['id'] ?>">View</button>
+                                    <?php endif ?>
+                                    <button class="edit_payroll" data-id="<?php echo $row['id'] ?>">Edit</button>
+                                    <button class="remove_payroll" data-id="<?php echo $row['id'] ?>">Delete</button>
+                                </center>
+                            </td>
+                        </tr>
+                    <?php
+                    endwhile;
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </body>
 
 </html>
+<div role="document" class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Edit Employee</h5>
+      </div>
+      <div class="modal-body"><div class="container-fluid">
+	<div class="col-lg-12">
+		<form id="manage-payroll">
+				<input type="hidden" name="id" value="">
+				<div class="form-group">
+					<label for="" class="control-label">Date From :</label>
+					<input type="date" class="form-control" name="date_from">
+				</div>
+				<div class="form-group">
+					<label for="" class="control-label">Date To :</label>
+					<input type="date" class="form-control" name="date_to">
+				</div>
+				<div class="form-group">
+					<label for="" class="control-label">Payroll Type :</label>
+					<select name="type" class="custom-select browser-default" id="">
+						<option value="1">Monthly</option>
+						<option value="2">Semi-Monthly</option>
+					</select>
+				</div>
+		</form>
+	</div>
+</div>
 
-<?php
-if (isset($_POST['submit'])) {
-    $edit_id = $_POST['id'];
-    $name = $_POST['name'];
-    if (!empty($edit_id)) {
-        $sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
-        $result_update = mysqli_query($conn, $sql_update);
-        if ($result_update) {
-            echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
-        }
-    } else {
-        $sql_insert = "INSERT INTO department (dname) VALUES ('$name')";
-        $result_insert = mysqli_query($conn, $sql_insert);
-        if ($result_insert) {
-            echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
-        }
-    }
-}
-
-if (isset($_POST['delete'])) {
-    $delete_id = $_POST['delete_id'];
-    $sql_delete = "DELETE FROM department WHERE id=$delete_id";
-    $result_delete = mysqli_query($conn, $sql_delete);
-
-    if (!$result_delete) {
-        echo "Error deleting record: " . mysqli_error($conn);
-    } else {
-        echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
-    }
-}
-?>
+<script>
+	$('#manage-payroll').submit(function(e){
+		e.preventDefault()
+		start_load()
+		$.ajax({
+		url:'ajax.php?action=save_payroll',
+		method:"POST",
+		data:$(this).serialize(),
+		error:err=>console.log(),
+		success:function(resp){
+				if(resp == 1){
+					alert_toast("Payroll successfully saved","success");
+					setTimeout(function(){
+								location.reload()
+							},1000)
+				}
+		}
+	})
+	})
+</script></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="submit" onclick="$('#uni_modal form').submit()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+      </div>
+    </div>

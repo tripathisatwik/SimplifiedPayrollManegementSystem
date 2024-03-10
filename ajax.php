@@ -10,43 +10,6 @@ if($action == "save_settings"){
 		echo $save;
 }
 
-if($action == "save_employee_allowance"){
-	$save = $crud->save_employee_allowance();
-	if($save)
-		echo $save;
-}
-if($action == "delete_employee_allowance"){
-	$save = $crud->delete_employee_allowance();
-	if($save)
-		echo $save;
-}
-
-if($action == "save_employee_deduction"){
-	$save = $crud->save_employee_deduction();
-	if($save)
-		echo $save;
-}
-if($action == "delete_employee_deduction"){
-	$save = $crud->delete_employee_deduction();
-	if($save)
-		echo $save;
-}
-
-if($action == "save_employee_attendance"){
-	$save = $crud->save_employee_attendance();
-	if($save)
-		echo $save;
-}
-if($action == "delete_employee_attendance"){
-	$save = $crud->delete_employee_attendance();
-	if($save)
-		echo $save;
-}
-if($action == "delete_employee_attendance_single"){
-	$save = $crud->delete_employee_attendance_single();
-	if($save)
-		echo $save;
-}
 if($action == "save_payroll"){
 	$save = $crud->save_payroll();
 	if($save)
