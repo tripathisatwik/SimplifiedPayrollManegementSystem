@@ -99,7 +99,6 @@
             align-items: center;
         }
 
-        /* Center the modal */
         .modal {
             display: none;
             position: fixed;
@@ -119,7 +118,6 @@
             text-align: center;
         }
 
-        /* Add a close button */
         .close {
             position: absolute;
             top: 0;

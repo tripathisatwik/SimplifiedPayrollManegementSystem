@@ -1,91 +1,10 @@
 <?php include 'dbconnect.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Attendance</title>
-    <style>
-        .center {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-        }
-
-        form[name="data"] {
-            display: flex;
-            flex-direction: column;
-            max-width: 400px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        label {
-            margin-bottom: 5px;
-        }
-
-        select,
-        input[type="datetime-local"] {
-            margin-bottom: 10px;
-            padding: 8px;
-        }
-
-        button[name="Cancel"],
-        input[name="delete"] {
-            background-color: #f44336;
-        }
-
-        input[name="submit"],
-        button {
-            background-color: #4caf50;
-        }
-
-        input[name="submit"],
-        input[name="delete"],
-        button {
-            padding: 10px;
-            cursor: pointer;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-left: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-        .action {
-            display: flex;
-            gap: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script>
         function reset() {
             $('#manage-attendance').get(0).reset();
@@ -94,7 +13,7 @@
         function confirmDelete() {
             return confirm("Are you sure you want to delete this record?");
         }
-        
+
         $(document).ready(function() {
             $('button[data-id]').click(function() {
                 start_load();
@@ -111,32 +30,39 @@
 </head>
 
 <body>
-    <div class="center">
-        <form id="manage-attendance" method="post" name="data">
-            <input type="hidden" name="id">
-            <label for="name">Name</label>
-            <select name="name" id="name">
-                <?php
-                $query = "SELECT employee.id, CONCAT(employee.lastname, ', ', employee.firstname, ' ', employee.middlename) AS ename FROM employee;";
-                $result = mysqli_query($conn, $query);
+    <div class="depmain">
+        <div class="depleft">
+            <div class="depleftup">Attendance</div>
+            <form id="manage-attendance" method="post" name="data">
+                <div class="depleftmid">
+                    <input type="hidden" name="id">
+                    <label for="name">Name</label>
+                    <select name="name" id="name">
+                        <?php
+                        $query = "SELECT employee.id, CONCAT(employee.lastname, ', ', employee.firstname, ' ', employee.middlename) AS ename FROM employee;";
+                        $result = mysqli_query($conn, $query);
 
-                while ($row = mysqli_fetch_array($result)) {
-                    echo "<option value='" . $row['id'] . "'>" . $row['ename'] . "</option>";
-                }
-                ?>
-            </select>
-            <label for="log_type">Type</label>
-            <select name="log_type" id="log_type">
-                <option value="1">Arrival Time</option>
-                <option value="2">Departure Time</option>
-            </select>
-            <label for="datetime_time">Date and Time</label>
-            <input type="datetime-local" name="datetime_time" id="datetime_time" required>
-            <input type="submit" name="submit">
-            <button type="button" onclick="reset()" name="Cancel">Cancel</button>
-        </form>
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo "<option value='" . $row['id'] . "'>" . $row['ename'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <label for="log_type">Type</label>
+                    <select name="log_type" id="log_type">
+                        <option value="1">Arrival Time</option>
+                        <option value="2">Departure Time</option>
+                    </select>
+                    <label for="datetime_time">Date and Time</label>
+                    <input type="datetime-local" name="datetime_time" id="datetime_time" required>
+                </div>
+                <div class="depleftdown">
+                    <input type="submit" name="submit">
+                    <button type="button" onclick="reset()" name="Cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
         <br>
-        <div class="data">
+        <div class="depright">
             <table border="1">
                 <tr>
                     <th>Date</th>
@@ -161,7 +87,7 @@
                         }
                     ?>
                         </td>
-                        <td class='action'>
+                        <td class="action-buttons">
                             <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['id']; ?>" data-logtype="<?php echo $row['log_type']; ?>" data-datetime="<?php echo $row['date']; ?>" id='edit_attendance'><i class="fa-solid fa-pen-to-square"></i></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
@@ -173,6 +99,7 @@
                     }
             ?>
             </table>
+
         </div>
     </div>
 </body>

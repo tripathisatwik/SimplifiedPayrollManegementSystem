@@ -4,6 +4,7 @@
 
 <head>
 <title>Allowances</title>
+<link rel="stylesheet" href="style.css">
 	<script>
 		function reset() {
 			$('#manage-allowance').get(0).reset();
@@ -24,90 +25,6 @@
 			});
 		});
 	</script>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 0;
-		}
-
-		.depmain {
-			display: flex;
-			justify-content: space-between;
-			margin: 20px;
-		}
-
-		.depleft,
-		.depright {
-			flex: 1;
-			padding: 10px;
-			border: 1px solid #ddd;
-			/* Add border around depleft */
-		}
-
-		.depleftup {
-			font-size: 20px;
-			font-weight: bold;
-			margin-bottom: 10px;
-		}
-
-		.depleftmid,
-		.depleftdown {
-			margin-bottom: 10px;
-		}
-
-		.depleftmid textarea {
-			width: 100%;
-			padding: 5px;
-			box-sizing: border-box;
-			margin-bottom: 10px;
-		}
-
-		.depleftdown {
-			display: flex;
-			align-items: center;
-		}
-
-		.depleftdown input {
-			padding: 8px;
-			margin-right: 10px;
-			cursor: pointer;
-			background-color: #4CAF50;
-			color: white;
-			border: none;
-		}
-
-		.depleftdown button {
-			padding: 8px;
-			margin-right: 10px;
-			cursor: pointer;
-			background-color: red;
-			color: white;
-			border: none;
-		}
-
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 20px;
-		}
-
-		th,
-		td {
-			border: 1px solid #ddd;
-			padding: 8px;
-			text-align: left;
-		}
-
-		th {
-			background-color: #f2f2f2;
-		}
-
-		form {
-			margin: 0;
-		}
-	</style>
 </head>
 
 <body>

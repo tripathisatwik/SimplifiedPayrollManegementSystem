@@ -4,92 +4,7 @@
 
 <head>
 	<title>User</title>
-	<style>
-		.center {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			width: 80%;
-			margin: auto;
-			padding: 20px;
-		}
-
-		.inputform {
-			display: flex;
-			flex-direction: column;
-			max-width: 400px;
-			padding: 20px;
-			border: 1px solid #ddd;
-			border-radius: 10px;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			background-color: #fff;
-		}
-
-		label {
-			margin-bottom: 5px;
-		}
-
-		select,
-		input[type="text"],
-		input[type="number"] {
-			margin-bottom: 10px;
-			padding: 8px;
-		}
-
-		button[name="Cancel"],
-		input[name="delete"] {
-			background-color: #f44336;
-		}
-
-		input[name="submit"],
-		button {
-			background-color: #4caf50;
-		}
-
-		input[name="submit"],
-		input[name="delete"],
-		button {
-			padding: 10px;
-			cursor: pointer;
-			color: white;
-			border: none;
-			border-radius: 5px;
-			margin-right: 10px;
-		}
-
-
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-left: 20px;
-		}
-
-		th,
-		td {
-			border: 1px solid #ddd;
-			padding: 8px;
-			text-align: left;
-		}
-
-		th {
-			background-color: #4caf50;
-			color: white;
-		}
-
-		tr:nth-child(even) {
-			background-color: #f2f2f2;
-		}
-
-		tr:hover {
-			background-color: #ddd;
-		}
-
-		.action {
-			display: flex;
-			gap: 5px;
-		}
-	</style>
+	<link rel="stylesheet" href="style.css">
 
 	</style>
 	<script>
@@ -118,25 +33,32 @@
 </head>
 
 <body>
-	<div class="center">
-		<form id="manage-user" method="post">
-			<input type="hidden" name="id">
-			<label for="name">Name</label>
-			<input type="text" name="name" id="name" required>
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username" required>
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password" required>
-			<label for="type">User Type</label>
-			<select name="type" id="type" class="custom-select" required>
-				<option value="1">Admin</option>
-				<option value="2">Staff</option>
-			</select>
-			<input type="submit" name="submit">
-			<button type="submit" onclick="reset()" name="Cancel">Cancel</button>
-		</form>
+	<div class="depmain">
+		<div class="depleft">
+			<div class="depleftup">User</div>
+			<form id="manage-user" method="post">
+				<div class="depleftmid">
+					<input type="hidden" name="id">
+					<label for="name">Name</label>
+					<input type="text" name="name" id="name" required>
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" required>
+					<label for="password">Password</label>
+					<input type="password" name="password" id="password" required>
+					<label for="type">User Type</label>
+					<select name="type" id="type" class="custom-select" required>
+						<option value="1">Admin</option>
+						<option value="2">Staff</option>
+					</select>
+				</div>
+				<div class="depleftdown">
+					<input type="submit" name="submit">
+					<button type="submit" onclick="reset()" name="Cancel">Cancel</button>
+				</div>
+			</form>
+		</div>
 		<br>
-		<div class="row">
+		<div class="depright">
 			<table border=1>
 				<tr>
 					<th>Id</th>
@@ -156,9 +78,8 @@
 						echo "<td>" . $row['name'] . "</td>";
 						echo "<td>" . $row['username'] . "</td>";
 				?>
-						<td class="action">
+						<td class="action-buttons">
 							<button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user"><i class="fa-solid fa-pen-to-square"></i></button>
-
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
 								<button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>

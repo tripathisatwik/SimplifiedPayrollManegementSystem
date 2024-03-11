@@ -4,91 +4,7 @@
 
 <head>
     <title>Employee</title>
-    <style>
-        .center {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .inputform {
-            display: flex;
-            flex-direction: column;
-            max-width: 400px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        label {
-            margin-bottom: 5px;
-        }
-
-        select,
-        input[type="text"],
-        input[type="number"] {
-            margin-bottom: 10px;
-            padding: 8px;
-        }
-
-        button[name="Cancel"],
-        input[name="delete"] {
-            background-color: #f44336;
-        }
-
-        input[name="submit"],
-        button {
-            background-color: #4caf50;
-        }
-
-        input[name="submit"],
-        input[name="delete"],
-        button {
-            padding: 10px;
-            cursor: pointer;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-left: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-        .action {
-            display: flex;
-            gap: 5px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script>
         function reset() {
             $('#manage-user').get(0).reset();
@@ -142,35 +58,41 @@
 </head>
 
 <body>
-    <div class="center">
-        <form id="manage-employee" method="post" class="inputform">
-            <input type="hidden" name="id" required>
-            <label for="firstname">First Name</label>
-            <input type="text" id="firstname" name="firstname" required>
-            <label for="middlename">Middle Name</label>
-            <input type="text" id="middlename" name="middlename" placeholder="(optional)">
-            <label for="lastname">Last Name</label>
-            <input type="text" id="lastname" name="lastname" required>
-            <label for="department">Department</label>
-            <select id="department" name="department" required>
-                <?php
-                $dept = $conn->query("SELECT * from department order by dname asc");
-                while ($row = $dept->fetch_assoc()) :
-                ?>
-                    <option value="<?php echo $row['id']; ?>"><?php echo $row['dname'] ?></option>
-                <?php endwhile; ?>
-            </select>
-            <label for="position">Position</label>
-            <select name="position" id="position" required>
-
-            </select>
-            <label for="salary">Salary</label>
-            <input type="number" name="salary" id="salary" required>
-            <input type="submit" name="submit">
-            <button type="submit" onclick="reset()" name="Cancel">Cancel</button>
-        </form>
+    <div class="depmain">
+        <div class="depleft">
+            <div class="depleftup">Employee</div>
+            <form id="manage-employee" method="post" class="inputform">
+                <div class="depleftmid">
+                    <input type="hidden" name="id" required>
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="firstname" name="firstname" required>
+                    <label for="middlename">Middle Name</label>
+                    <input type="text" id="middlename" name="middlename" placeholder="(optional)">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" id="lastname" name="lastname" required>
+                    <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <?php
+                        $dept = $conn->query("SELECT * from department order by dname asc");
+                        while ($row = $dept->fetch_assoc()) :
+                        ?>
+                            <option value="<?php echo $row['id']; ?>"><?php echo $row['dname'] ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                    <label for="position">Position</label>
+                    <select name="position" id="position" required>
+                    </select>
+                    <label for="salary">Salary</label>
+                    <input type="number" name="salary" id="salary" required>
+                </div>
+                <div class="depleftdown">
+                    <input type="submit" name="submit">
+                    <button type="submit" onclick="reset()" name="Cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
         <br>
-        <div class="data">
+        <div class="depright">
             <table border="1">
                 <tr>
                     <th>Employee No</th>
