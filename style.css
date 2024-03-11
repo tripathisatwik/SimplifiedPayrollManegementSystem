@@ -85,11 +85,6 @@ th {
     color: #fff;
 }
 
-.action-buttons {
-    display: flex;
-    align-items: center;
-}
-
 .action-buttons  button {
     background-color: transparent;
     border: none;

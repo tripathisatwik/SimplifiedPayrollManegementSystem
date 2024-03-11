@@ -23,7 +23,7 @@
 
 <body>
     <div class="time">
-        Current Date/Time: <?php echo (strftime("%m/%d/%Y %H:%M")); ?></p>
+        Current Date/Time: <?php date_default_timezone_set('Asia/Kathmandu'); echo date("Y-m-d H:i", time()); ?></p>
     </div>
     <div class="text">
         <?php

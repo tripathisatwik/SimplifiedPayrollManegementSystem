@@ -82,7 +82,7 @@
 							<button name="edit" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name'] ?>" data-user="<?php echo $row['username']; ?>" data-pass="<?php echo $row['password']; ?>" data-type="<?php echo $row['type']; ?>" id="edit_user"><i class="fa-solid fa-pen-to-square"></i></button>
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-								<button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
+								<button type="submit" name="delete"><i class="fa-solid fa-trash-can"></i></button>
 
 							</form>
 						</td>

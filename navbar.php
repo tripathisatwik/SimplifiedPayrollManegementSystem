@@ -37,12 +37,13 @@
 
 		.sidebar-list a:hover {
 			background-color: #555;
+			border-radius: 8px;
 		}
 
 		.sidebar-list a.active {
 			background-color: #007bff;
+			border-radius: 8px;
 		}
-
 
 		.icon-field {
 			margin-right: 10px;
@@ -51,6 +52,7 @@
 		body {
 			font-family: 'Arial', sans-serif;
 		}
+
 		.footer{
 			position: fixed;
             bottom: 0;

@@ -91,7 +91,7 @@
                             <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['id']; ?>" data-logtype="<?php echo $row['log_type']; ?>" data-datetime="<?php echo $row['date']; ?>" id='edit_attendance'><i class="fa-solid fa-pen-to-square"></i></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
+                                <button type="submit" name="delete"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </td>
                 </tr>

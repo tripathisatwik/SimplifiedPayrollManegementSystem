@@ -126,7 +126,7 @@
                             </button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <button type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
+                                <button type="submit" name="delete"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </td>
                     <?php
