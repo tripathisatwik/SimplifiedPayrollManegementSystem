@@ -39,7 +39,7 @@
             color: black;
             padding: 5px;
             cursor: pointer;
-        } 
+        }
 
         .dropdown-content {
             display: none;
@@ -97,10 +97,17 @@
 
                 <div class="right">
                     <div class="dropdown">
-                        <button  onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo ucfirst($_SESSION['login_name']) ?> <i class="fa-solid fa-caret-down"></i></button>
-                        <div id="dropdownContent" class="dropdown-content">
-                            <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-                        </div>
+                        <?php if ($_SESSION['login_type'] == 1) { ?>
+                            <button onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo "Admin" ?> <i class="fa-solid fa-caret-down"></i></button>
+                            <div id="dropdownContent" class="dropdown-content">
+                                <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                            </div>
+                        <?php } else { ?>
+                            <button onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo "User" ?> <i class="fa-solid fa-caret-down"></i></button>
+                            <div id="dropdownContent" class="dropdown-content">
+                                <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
