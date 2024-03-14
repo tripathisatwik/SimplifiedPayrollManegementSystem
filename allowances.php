@@ -13,6 +13,7 @@
 		function confirmDelete() {
 			return confirm("Are you sure you want to delete this record?");
 		}
+		
 		$(document).ready(function() {
 			$('button[data-id]').click(function() {
 				start_load();
@@ -72,11 +73,11 @@
 
 				?>
 						<td class="action-buttons">
-							<button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['allowance'] ?>" data-des="<?php echo $row['description']; ?>"><i class="fa-solid fa-pen-to-square"></i></button>
+							<button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['allowance'] ?>" data-des="<?php echo $row['description']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
 
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-								<button type="submit" name="delete"><i class="fa-solid fa-trash-can"></i></button>
+								<button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
 
 							</form>
 						</td>

@@ -77,22 +77,6 @@
             color: #fff;
         }
 
-        i {
-            margin-right: 5px;
-        }
-
-        i.fa-eye {
-            color: #28a745;
-        }
-
-        i.fa-pen-to-square {
-            color: #007bff;
-        }
-
-        i.fa-trash-can {
-            color: #dc3545;
-        }
-
         center {
             display: flex;
             justify-content: center;
@@ -217,11 +201,11 @@
                                     <?php else : ?>
                                         <button class="view_payroll" data-id="<?php echo $row['id'] ?>"><i class="fa-regular fa-eye"></i></button>
                                     <?php endif ?>
-                                    <button class="edit_payroll" data-id="<?php echo $row['id'] ?>"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button class="edit_payroll" data-id="<?php echo $row['id'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                                     <form method="POST" onsubmit="return confirmDelete()">
                                         <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
                                         <button type="submit" name="delete" class="remove_payroll">
-                                            <i class="fa-solid fa-trash-can"></i>Delete
+                                            <img src="./icons/delete-modified.png" alt="Delete">Delete
                                         </button>
                                     </form>
                                 </center>

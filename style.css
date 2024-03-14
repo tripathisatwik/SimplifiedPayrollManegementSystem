@@ -85,27 +85,10 @@ th {
     color: #fff;
 }
 
-.action-buttons  button {
-    background-color: transparent;
-    border: none;
+td.text-center {
+    text-align: center;
 }
 
 .action-buttons  button :hover {
     cursor: pointer;
-}
-
-i {
-    margin-right: 5px;
-}
-
-i.fa-eye {
-    color: #28a745;
-}
-
-i.fa-pen-to-square {
-    color: #007bff;
-}
-
-i.fa-trash-can {
-    color: #dc3545;
 }

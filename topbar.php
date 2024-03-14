@@ -39,6 +39,14 @@
             color: black;
             padding: 5px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropbtn img {
+            width: 14px; /* Adjust the size as needed */
+            height: 14px;
+            margin-right: 5px; /* Optional: add some space between the image and the text */
         }
 
         .dropdown-content {
@@ -64,6 +72,7 @@
         .show {
             display: block;
         }
+
     </style>
     <script>
         function toggleDropdown() {
@@ -98,7 +107,7 @@
                 <div class="right">
                     <div class="dropdown">
                         <?php if ($_SESSION['login_type'] == 1) { ?>
-                            <button onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo "Admin" ?> <i class="fa-solid fa-caret-down"></i></button>
+                            <button onclick="toggleDropdown()" class="dropbtn"><img src="./icons/user.png" alt=""> <?php echo "Admin" ?> <i class="fa-solid fa-caret-down"></i></button>
                             <div id="dropdownContent" class="dropdown-content">
                                 <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                             </div>

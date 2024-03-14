@@ -88,10 +88,10 @@
                     ?>
                         </td>
                         <td class="action-buttons">
-                            <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['id']; ?>" data-logtype="<?php echo $row['log_type']; ?>" data-datetime="<?php echo $row['date']; ?>" id='edit_attendance'><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['id']; ?>" data-logtype="<?php echo $row['log_type']; ?>" data-datetime="<?php echo $row['date']; ?>" id='edit_attendance'><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <button type="submit" name="delete"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                             </form>
                         </td>
                 </tr>

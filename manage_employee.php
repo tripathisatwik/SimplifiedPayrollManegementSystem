@@ -133,10 +133,10 @@ $id = $_SESSION['view_id'];
                                 </td>
                                 <td><?php echo $row2['amount'] ?></td>
                                 <td>
-                                    <button name="edit" id="edit_allowance" data-id="<?php echo $row2['allowance_id'] ?>" data-name="<?php echo $row2['allowance'] ?>" data-type="<?php echo $row2['type']; ?>" data-amount="<?php echo $row2['amount']; ?>">Edit</button>
+                                    <button name="edit" id="edit_allowance" data-id="<?php echo $row2['allowance_id'] ?>" data-name="<?php echo $row2['allowance'] ?>" data-type="<?php echo $row2['type']; ?>" data-amount="<?php echo $row2['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                                     <form method="post" onsubmit="return confirmDelete()">
                                         <input type="hidden" name="delete_id" value="<?php echo $row2['id']; ?>">
-                                        <input type="submit" name="delete" value="Delete">
+                                        <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                                     </form>
                                 </td>
                             </tr>
@@ -201,11 +201,11 @@ $id = $_SESSION['view_id'];
                                 </td>
                                 <td><?php echo $row4['amount'] ?></td>
                                 <td>
-                                   <button name="edit" id="edit_deduction" data-id="<?php echo $row4['deduction_id'] ?>" data-name="<?php echo $row4['deduction'] ?>" data-type="<?php echo $row4['type']; ?>" data-amount="<?php echo $row4['amount']; ?>">Edit</button>
+                                   <button name="edit" id="edit_deduction" data-id="<?php echo $row4['deduction_id'] ?>" data-name="<?php echo $row4['deduction'] ?>" data-type="<?php echo $row4['type']; ?>" data-amount="<?php echo $row4['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
 
                                     <form method="post" onsubmit="return confirmDelete()">
                                         <input type="hidden" name="delete_id" value="<?php echo $row4['id']; ?>">
-                                        <input type="submit" name="delete" value="Delete">
+                                        <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                                     </form>
                                 </td>
                             </tr>
