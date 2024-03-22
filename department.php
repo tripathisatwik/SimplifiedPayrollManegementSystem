@@ -3,8 +3,15 @@
 <html lang="en">
 
 <head>
-<title>Department</title>
-<link rel="stylesheet" href="style.css">
+	<title>Department</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+		.action-buttons button,
+		form {
+			display: inline-block;
+			vertical-align: middle;
+		}
+	</style>
 	<script>
 		function reset() {
 			$('#manage-department').get(0).reset();
@@ -32,7 +39,7 @@
 			<form action="http://localhost/final/index.php?page=department" method="post" id="manage-department">
 				<div class="depleftup">Department</div>
 				<div class="depleftmid">
-					<input type="hidden" name="id" >
+					<input type="hidden" name="id">
 					<label class="control-label">Name</label><br>
 					<input type="text" name="name" required>
 				</div>
@@ -61,8 +68,7 @@
 						echo "<td>" . $row['dname'] . "</td>";
 				?>
 						<td class="action-buttons">
-							<button type="button" data-id="<?php echo $row['id']; ?>" 
-							data-name="<?php echo $row['dname'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+							<button type="button" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['dname'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
 							<form method="post" onsubmit="return confirmDelete()">
 								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
 								<button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
@@ -88,7 +94,7 @@ if (isset($_POST['submit'])) {
 		$sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
 		$result_update = mysqli_query($conn, $sql_update);
 		if ($result_update) {
-            echo '<script>alert("Department Updated")</script>';
+			echo '<script>alert("Department Updated")</script>';
 		}
 	} else {
 		$sql_insert = "INSERT INTO department (dname) VALUES ('$name')";

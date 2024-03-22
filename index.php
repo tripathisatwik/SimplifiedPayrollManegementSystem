@@ -6,8 +6,14 @@
   <style>
     #view-panel {
       padding-left: 15rem;
-      padding-top: 2rem;
+      padding-top: 5rem;
       max-width: 82%;
+    }
+
+    .navbar,
+    .sidebar {
+      position: fixed;
+      width: 100%;
     }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -36,7 +42,6 @@ include 'navbar.php';
         $(this).remove();
       })
     }
-   
   </script>
 
 </html>

@@ -5,6 +5,13 @@
 <head>
     <title>Deductions</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .action-buttons button,
+        form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
     <script>
         function reset() {
             $('#manage-deduction').get(0).reset();
@@ -14,8 +21,8 @@
             return confirm("Are you sure you want to delete this record?");
         }
 
-        $(document).ready(function () {
-            $('button[data-id]').click(function () {
+        $(document).ready(function() {
+            $('button[data-id]').click(function() {
                 start_load();
                 var cat = $('#manage-deduction');
                 cat.get(0).reset();

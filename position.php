@@ -3,8 +3,15 @@
 <html lang="en">
 
 <head>
-<title>Position</title>
-<link rel="stylesheet" href="style.css">
+    <title>Position</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .action-buttons button,
+        form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
     <script>
         function reset() {
             $('#manage-position').get(0).reset();
@@ -34,7 +41,7 @@
             <form action="http://localhost/final/index.php?page=position" method="post" id="manage-position">
                 <div class="depleftup">Position</div>
                 <div class="depleftmid">
-                    <input type="hidden" name="id" >
+                    <input type="hidden" name="id">
                     <label class="control-label">Department</label><br>
                     <select name="department" required>
                         <?php

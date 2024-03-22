@@ -5,6 +5,13 @@
 <head>
     <title>Employee</title>
     <link rel="stylesheet" href="style.css">
+        <style>
+        .action-buttons button,
+        form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
     <script>
         function reset() {
             $('#manage-user').get(0).reset();
@@ -116,7 +123,7 @@
                         echo  "<td>" . $row["name"] . "</td>";
                         echo  "<td>" . $row["salary"] . "</td>";
                     ?>
-                        <td class="action">
+                        <td class="action-buttons">
                             <button name="edit" id="edit_empolyee" data-id="<?php echo $row['id']; ?>" data-employee_no="<?php echo $row['employee_no'] ?>" data-firstname="<?php echo $row['firstname'] ?>" data-middlename="<?php echo $row['middlename'] ?>" data-lastname="<?php echo $row['lastname'] ?>" data-department="<?php echo $row['department_id'] ?>" data-position="<?php echo $row['position_id'] ?>" data-salary="<?php echo $row['salary'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <button class="manage_employee" id="manage_employee" type="button">
                                 <a href="http://localhost/final/index.php?page=manage_employee"><img src="./icons/profits-modified.png" alt=""></a>

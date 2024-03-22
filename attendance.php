@@ -5,6 +5,13 @@
 <head>
     <title>Attendance</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .action-buttons button,
+        form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             // Edit button click handler using event delegation
@@ -70,7 +77,7 @@
         </div>
         <br>
         <div class="depright">
-            <table border="1">
+            <table>
                 <tr>
                     <th>Date</th>
                     <th>Employee No</th>
@@ -88,9 +95,9 @@
                         echo "<td>" . $row['ename'] . "</td>";
                         echo "<td>";
                         if ($row['log_type'] == 1) {
-                            echo "Arrived at: " . $row['time'];
+                            echo "Arrived at: " . $row['time'] . " " . "am";
                         } else {
-                            echo "Left at: " . $row['time'];
+                            echo "Left at: " . $row['time'] . " " . "pm";
                         }
                     ?>
                         </td>

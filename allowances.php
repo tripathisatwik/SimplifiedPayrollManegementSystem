@@ -3,8 +3,15 @@
 <html lang="en">
 
 <head>
-<title>Allowances</title>
-<link rel="stylesheet" href="style.css">
+	<title>Allowances</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+		.action-buttons button,
+		form {
+			display: inline-block;
+			vertical-align: middle;
+		}
+	</style>
 	<script>
 		function reset() {
 			$('#manage-allowance').get(0).reset();
@@ -13,7 +20,7 @@
 		function confirmDelete() {
 			return confirm("Are you sure you want to delete this record?");
 		}
-		
+
 		$(document).ready(function() {
 			$('button[data-id]').click(function() {
 				start_load();
@@ -105,13 +112,13 @@ if (isset($_POST['submit'])) {
 		$sql_update = "UPDATE `allowances` SET `allowance`='$name',`description`='$description' WHERE id='$edit_id' ";
 		$result_update = mysqli_query($conn, $sql_update);
 		if ($result_update) {
-            echo '<script>alert("Allowance Data Updated")</script>';
+			echo '<script>alert("Allowance Data Updated")</script>';
 		}
 	} else {
 		$sql_insert = "INSERT INTO `allowances`(`id`, `allowance`, `description`) VALUES ('','name','$description')";
 		$result_insert = mysqli_query($conn, $sql_insert);
 		if ($result_insert) {
-            echo '<script>alert("New Allowance Added")</script>';
+			echo '<script>alert("New Allowance Added")</script>';
 		}
 	}
 }

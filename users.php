@@ -5,8 +5,13 @@
 <head>
 	<title>User</title>
 	<link rel="stylesheet" href="style.css">
-
-	</style>
+    <style>
+        .action-buttons button,
+        form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
 	<script>
 		function reset() {
 			$('#manage-user').get(0).reset();
