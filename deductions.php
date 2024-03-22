@@ -103,13 +103,13 @@ if (isset($_POST['submit'])) {
         $sql_update = "UPDATE `deductions` SET `deduction`='$name',`description`='$description' WHERE id='$edit_id' ";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo '<script>window.location="http://localhost/final/index.php?page=deductions"</script>';
+            echo '<script>alert("Deduction Data Updated")</script>';
         }
     } else {
         $sql_insert = "INSERT INTO `deductions`(`id`, `deduction`, `description`) VALUES ('','name','$description')";
         $result_insert = mysqli_query($conn, $sql_insert);
         if ($result_insert) {
-            echo '<script>window.location="http://localhost/final/index.php?page=deductions"</script>';
+            echo '<script>alert("New Deduction Added")</script>';
         }
     }
 }
@@ -122,7 +122,7 @@ if (isset($_POST['delete'])) {
     if (!$result_delete) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
-        echo '<script>window.location="http://localhost/final/index.php?page=deductions"</script>';
+        echo '<script>alert("Deduction Deleted")</script>';
     }
 }
 ?>

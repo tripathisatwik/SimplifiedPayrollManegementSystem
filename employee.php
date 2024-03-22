@@ -83,7 +83,7 @@
                     <select name="position" id="position" required>
                     </select>
                     <label for="salary">Salary</label>
-                    <input type="number" name="salary" id="salary" required>
+                    <input type="number" name="salary" id="salary" required min="8000">
                 </div>
                 <div class="depleftdown">
                     <input type="submit" name="submit">
@@ -140,6 +140,16 @@
 
 </html>
 <?php
+if (isset($_POST['department_id'])) {
+    $departmentId = $_POST['department_id'];
+    $positionsQuery = $conn->query("SELECT * from position WHERE department_id = $departmentId order by name asc");
+    $options = '';
+    while ($row = $positionsQuery->fetch_assoc()) {
+        $options .= '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+    }
+    echo $options;
+}
+
 if (isset($_POST['submit'])) {
     $edit_id = $_POST['id'];
     $employee_no = $_POST['employee_no'];
@@ -154,7 +164,7 @@ if (isset($_POST['submit'])) {
         $sql_update = "UPDATE `employee` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`department_id`='$department',`position_id`='$position',`salary`='$salary' WHERE id=$edit_id";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
+            echo '<script>alert("Employee Data Updated")</script>';
         } else {
             echo "Error updating record: " . mysqli_error($conn);
         }
@@ -164,21 +174,11 @@ if (isset($_POST['submit'])) {
         $sql_insert = "INSERT INTO `employee`(`employee_no`, `firstname`, `middlename`, `lastname`, `department_id`, `position_id`, `salary`) VALUES ('$employee_no','$firstname','$middlename','$lastname','$department','$position','$salary')";
         $result_insert = mysqli_query($conn, $sql_insert);
         if ($result_insert) {
-            echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
+            echo '<script>alert("Employee Data Inserted")</script>';
         } else {
             echo "Error inserting record: " . mysqli_error($conn);
         }
     }
-}
-if (isset($_POST['department_id'])) {
-    $departmentId = $_POST['department_id'];
-    $positionsQuery = $conn->query("SELECT * from position WHERE department_id = $departmentId order by name asc");
-    $options = '';
-    while ($row = $positionsQuery->fetch_assoc()) {
-        $options .= '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-    }
-
-    echo $options;
 }
 
 if (isset($_POST['delete'])) {
@@ -189,7 +189,7 @@ if (isset($_POST['delete'])) {
     if (!$result_delete) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
-        echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
+        echo '<script>alert("Employee Data Deleted")</script>';
     }
 }
 ?>

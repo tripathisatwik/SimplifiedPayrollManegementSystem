@@ -99,7 +99,7 @@ if (isset($_POST['submit'])) {
         $sql_update = "UPDATE position SET department_id='$dept', name='$name' WHERE id='$edit_id'";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            echo '<script>alert("Position Updated")</script>';
         } else {
             echo '<script>console.log("Error updating record!");</script>';
         }
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
         $sql_insert = "INSERT INTO position (department_id, name) VALUES ('$dept', '$name')";
         $result_insert = mysqli_query($conn, $sql_insert);
         if ($result_insert) {
-            echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            echo '<script>alert("New Position Added")</script>';
         } else {
             echo '<script>console.log("Error inserting record!");</script>';
         }
@@ -121,7 +121,7 @@ if (isset($_POST['delete'])) {
     if (!$result_delete) {
         echo '<script>console.log("Error deleting record!");</script>';
     } else {
-        echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+        echo '<script>alert("Position Deleted")</script>';
     }
 }
 ?>

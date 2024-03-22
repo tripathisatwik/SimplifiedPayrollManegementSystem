@@ -52,8 +52,12 @@
                         <option value="1">Arrival Time</option>
                         <option value="2">Departure Time</option>
                     </select>
-                    <label for="datetime_time">Date and Time</label>
-                    <input type="datetime-local" name="datetime_time" id="datetime_time" required>
+                    <label for="date">Date</label>
+                    <input type="date" name="date" id="date" required max="<?php echo date('Y-m-d'); ?>">
+
+                    <label for="time">Time (24-hour format)</label>
+                    <input type="time" name="time" id="time" required step="1">
+
                 </div>
                 <div class="depleftdown">
                     <input type="submit" name="submit">
@@ -110,21 +114,47 @@ if (isset($_POST['submit'])) {
     $edit_id = $_POST['id'];
     $name = $_POST['name'];
     $log_type = $_POST['log_type'];
-    $datetime_time = $_POST['datetime_time'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $datetime_time = $date . ' ' . $time;
+
     if (!empty($edit_id)) {
+        // For updates, perform the update directly
         $sql_update = "UPDATE `attendance` SET `employee_id`='$name', `log_type`='$log_type', `datetime_log`='$datetime_time' WHERE id=$edit_id";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo '<script>window.location="http://localhost/final/index.php?page=attendance"</script>';
+            echo '<script>alert("Attendance Record Updated")</script>';        
         }
     } else {
+        // For inserts, validate the departure time against the arrival time
+        if ($log_type == 2) { // Check if the log type is departure
+            $arrival_time_query = "SELECT datetime_log FROM attendance WHERE employee_id='$name' AND log_type=1 AND DATE(datetime_log) = DATE('$datetime_time')";
+            $arrival_result = mysqli_query($conn, $arrival_time_query);
+            if (mysqli_num_rows($arrival_result) > 0) {
+                $arrival_row = mysqli_fetch_assoc($arrival_result);
+                $arrival_time = strtotime($arrival_row['datetime_log']);
+                $departure_time = strtotime($datetime_time);
+                if ($departure_time <= $arrival_time) {
+                    // Departure time is earlier than or equal to arrival time
+                    echo '<script>alert("Departure time must be later than arrival time.");</script>';
+                    exit; // Exit the script to prevent further execution
+                }
+            } else {
+                // Arrival time not found for the selected employee on the same date
+                echo '<script>alert("Arrival time not found for the selected employee on the same date.");</script>';
+                exit;
+            }
+        }
+
+        // If validation passes, proceed with the insertion
         $sql_insert = "INSERT INTO `attendance`(`employee_id`, `log_type`, `datetime_log`) VALUES ('$name','$log_type','$datetime_time')";
         $result_insert = mysqli_query($conn, $sql_insert);
         if ($result_insert) {
-            echo '<script>window.location="http://localhost/final/index.php?page=attendance"</script>';
+            echo '<script>alert("Attendance Record Inserted ")</script>';
         }
     }
 }
+
 if (isset($_POST['delete'])) {
     $delete_id = $_POST['delete_id'];
     $sql_delete = "DELETE FROM attendance WHERE id=$delete_id";
@@ -132,7 +162,7 @@ if (isset($_POST['delete'])) {
     if (!$result_delete) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
-        echo '<script>window.location="http://localhost/final/index.php?page=attendance"</script>';
+        echo '<script>alert("Attendance Record Deleted")</script>';
     }
 }
 ?>

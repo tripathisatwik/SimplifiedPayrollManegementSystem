@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
 		$result_update = mysqli_query($conn, $sql_update);
 
 		if ($result_update) {
-			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+			echo '<script>alert("User Updated")</script>';
 		} else {
 			echo "Error updating record: " . mysqli_error($conn);
 		}
@@ -126,9 +126,9 @@ if (isset($_POST['submit'])) {
 		$result_insert = mysqli_query($conn, $sql_insert);
 
 		if ($result_insert) {
-			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+			echo '<script>alert("New User Added")</script>';
 		} else {
-			echo "Error inserting record: " . mysqli_error($conn);
+			echo '<script>alert("User already exist")</script>';
 		}
 	}
 }
@@ -141,7 +141,7 @@ if (isset($_POST['delete'])) {
 	if (!$result_delete) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
-		echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+		echo '<script>alert("User Deleted")</script>';
 	}
 }
 ?>

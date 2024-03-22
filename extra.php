@@ -1,15 +1,5 @@
-<?php
-include 'dbconnect.php';
-if (isset($_POST['submit'])) {
-    $username = $_POST["username"];
-    $password = md5($_POST["password"]);
-        $sql = "INSERT INTO `users`(`id`, `doctor_id`, `name`, `address`, `contact`, `username`, `password`, `type`)
-        VALUES ('','','satwik','','','$username','$password','1')";
-        $result = mysqli_query($conn, $sql);
-        echo "<p class='account-created'>Your Account has been Created. <br>Click on LogIn</p>";
-    mysqli_close($conn);
-}
-?>
+<?php include 'dbconnect.php'; ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -104,13 +94,32 @@ if (isset($_POST['submit'])) {
         <form action="" method="POST">
             <h1>SignUp</h1>
             <hr>
+            <label class="input-label">Name</label>
+            <input type="text" name="name" required placeholder="Enter Name"><br>
             <label class="input-label">Username</label>
             <input type="text" name="username" required placeholder="Enter Username"><br>
             <label class="input-label">Password</label>
             <input type="password" name="password" required placeholder="Enter Password"><br>
+            <select name="type" id="type">
+                <option value="1">Admin</option>
+                <option value="2">User</option>
+            </select><br><br>
             <input type="submit" name="submit" value="SignUp">
         </form>
     </div>
 </body>
 
 </html>
+<?php
+if (isset($_POST['submit'])) {
+    $name = $_POST["name"];
+    $username = $_POST["name"];
+    $password = md5($_POST["password"]);
+    $type = $_POST["type"];
+    $sql = "INSERT INTO `users`(`id`, `name`, `username`, `password`, `type`)
+        VALUES ('','$name','$username','$password','$type')";
+    $result = mysqli_query($conn, $sql);
+    echo "<p class='account-created'>Your Account has been Created. <br>Click on LogIn</p>";
+    mysqli_close($conn);
+}
+?>

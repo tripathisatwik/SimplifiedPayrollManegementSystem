@@ -88,13 +88,13 @@ if (isset($_POST['submit'])) {
 		$sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
 		$result_update = mysqli_query($conn, $sql_update);
 		if ($result_update) {
-			echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
+            echo '<script>alert("Department Updated")</script>';
 		}
 	} else {
 		$sql_insert = "INSERT INTO department (dname) VALUES ('$name')";
 		$result_insert = mysqli_query($conn, $sql_insert);
 		if ($result_insert) {
-			echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
+			echo '<script>alert("New Department Created")</script>';
 		}
 	}
 }
@@ -107,7 +107,7 @@ if (isset($_POST['delete'])) {
 	if (!$result_delete) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
-		echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
+		echo '<script>alert("Department Deleted")</script>';
 	}
 }
 ?>

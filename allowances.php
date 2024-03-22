@@ -105,13 +105,13 @@ if (isset($_POST['submit'])) {
 		$sql_update = "UPDATE `allowances` SET `allowance`='$name',`description`='$description' WHERE id='$edit_id' ";
 		$result_update = mysqli_query($conn, $sql_update);
 		if ($result_update) {
-			echo '<script>window.location="http://localhost/final/index.php?page=allowances"</script>';
+            echo '<script>alert("Allowance Data Updated")</script>';
 		}
 	} else {
 		$sql_insert = "INSERT INTO `allowances`(`id`, `allowance`, `description`) VALUES ('','name','$description')";
 		$result_insert = mysqli_query($conn, $sql_insert);
 		if ($result_insert) {
-			echo '<script>window.location="http://localhost/final/index.php?page=allowances"</script>';
+            echo '<script>alert("New Allowance Added")</script>';
 		}
 	}
 }
@@ -124,7 +124,7 @@ if (isset($_POST['delete'])) {
 	if (!$result_delete) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
-		echo '<script>window.location="http://localhost/final/index.php?page=allowances"</script>';
+		echo '<script>alert("Allowance Deleted")</script>';
 	}
 }
 ?>
