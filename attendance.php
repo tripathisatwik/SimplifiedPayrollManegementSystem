@@ -6,27 +6,30 @@
     <title>Attendance</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        function reset() {
-            $('#manage-attendance').get(0).reset();
-        }
-
-        function confirmDelete() {
-            return confirm("Are you sure you want to delete this record?");
-        }
-
         $(document).ready(function() {
-            $('button[data-id]').click(function() {
-                start_load();
+            // Edit button click handler using event delegation
+            $(document).on('click', 'button[data-id]', function() {
                 var cat = $('#manage-attendance');
-                cat.get(0).reset();
-                cat.find("[name='id']").val($(this).attr('data-id'));
-                cat.find("[name='name']").val($(this).attr('data-name'));
-                cat.find("[name='log_type']").val($(this).attr('data-logtype'));
-                cat.find("[name='datetime_time']").val($(this).attr('data-datetime'));
-                end_load();
+                // Populate input fields with data attributes of the clicked button
+                cat.find("[name='id']").val($(this).data('id'));
+                cat.find("[name='name']").val($(this).data('name'));
+                cat.find("[name='log_type']").val($(this).data('logtype'));
+                cat.find("[name='date']").val($(this).data('date'));
+                cat.find("[name='time']").val($(this).data('time'));
             });
+
+            // Function to reset form
+            function reset() {
+                $('#manage-attendance').get(0).reset();
+            }
+
+            // Function to confirm delete action
+            function confirmDelete() {
+                return confirm("Are you sure you want to delete this record?");
+            }
         });
     </script>
+
 </head>
 
 <body>
@@ -92,7 +95,7 @@
                     ?>
                         </td>
                         <td class="action-buttons">
-                            <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['id']; ?>" data-logtype="<?php echo $row['log_type']; ?>" data-datetime="<?php echo $row['date']; ?>" id='edit_attendance'><img src="./icons/editing-modified.png" alt="Edit"></button>
+                        <button data-id="<?php echo $row['id']; ?>" data-name="<?php echo htmlspecialchars($row['ename']); ?>" data-logtype="<?php echo $row['log_type']; ?>" data-date="<?php echo $row['date']; ?>" data-time="<?php echo $row['time']; ?>" id='edit_attendance'><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
                                 <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
@@ -123,7 +126,7 @@ if (isset($_POST['submit'])) {
         $sql_update = "UPDATE `attendance` SET `employee_id`='$name', `log_type`='$log_type', `datetime_log`='$datetime_time' WHERE id=$edit_id";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo '<script>alert("Attendance Record Updated")</script>';        
+            echo '<script>alert("Attendance Record Updated")</script>';
         }
     } else {
         // For inserts, validate the departure time against the arrival time

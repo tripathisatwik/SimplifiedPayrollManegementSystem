@@ -51,7 +51,7 @@
 			</form>
 		</div>
 		<div class="depright">
-			<table border=1>
+			<table>
 				<tr>
 					<th>Id</th>
 					<th>Name</th>
