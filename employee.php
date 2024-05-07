@@ -5,7 +5,7 @@
 <head>
     <title>Employee</title>
     <link rel="stylesheet" href="style.css">
-        <style>
+    <style>
         .action-buttons button,
         form {
             display: inline-block;
@@ -136,10 +136,10 @@
                                 <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                             </form>
                         </td>
-                    <?php
-                    }
-                    ?>
                 </tr>
+            <?php
+            }
+            ?>
             </table>
         </div>
     </div>
@@ -167,23 +167,30 @@ if (isset($_POST['submit'])) {
     $position = $_POST['position'];
     $salary = $_POST['salary'];
 
-    if (!empty($edit_id)) {
-        $sql_update = "UPDATE `employee` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`department_id`='$department',`position_id`='$position',`salary`='$salary' WHERE id=$edit_id";
-        $result_update = mysqli_query($conn, $sql_update);
-        if ($result_update) {
-            echo '<script>alert("Employee Data Updated")</script>';
-        } else {
-            echo "Error updating record: " . mysqli_error($conn);
-        }
+    if (empty($firstname) || empty($lastname) || empty($salary)) {
+        echo '<script>alert("All fields required")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
     } else {
-        $year = date("Y");
-        $employee_no = $year . "-" . str_pad($department, 2, "0", STR_PAD_LEFT) . str_pad($position, 2, "0", STR_PAD_LEFT) . str_pad($edit_id, 2, "0", STR_PAD_LEFT);
-        $sql_insert = "INSERT INTO `employee`(`employee_no`, `firstname`, `middlename`, `lastname`, `department_id`, `position_id`, `salary`) VALUES ('$employee_no','$firstname','$middlename','$lastname','$department','$position','$salary')";
-        $result_insert = mysqli_query($conn, $sql_insert);
-        if ($result_insert) {
-            echo '<script>alert("Employee Data Inserted")</script>';
+        if (!empty($edit_id)) {
+            $sql_update = "UPDATE `employee` SET `firstname`='$firstname',`middlename`='$middlename',`lastname`='$lastname',`department_id`='$department',`position_id`='$position',`salary`='$salary' WHERE id=$edit_id";
+            $result_update = mysqli_query($conn, $sql_update);
+            if ($result_update) {
+                echo '<script>alert("Employee Data Updated")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
+            } else {
+                echo "Error updating record: " . mysqli_error($conn);
+            }
         } else {
-            echo "Error inserting record: " . mysqli_error($conn);
+            $year = date("Y");
+            $employee_no = $year . "-" . str_pad($department, 2, "0", STR_PAD_LEFT) . str_pad($position, 2, "0", STR_PAD_LEFT) . str_pad($edit_id, 2, "0", STR_PAD_LEFT);
+            $sql_insert = "INSERT INTO `employee`(`employee_no`, `firstname`, `middlename`, `lastname`, `department_id`, `position_id`, `salary`) VALUES ('$employee_no','$firstname','$middlename','$lastname','$department','$position','$salary')";
+            $result_insert = mysqli_query($conn, $sql_insert);
+            if ($result_insert) {
+                echo '<script>alert("Employee Data Inserted")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
+            } else {
+                echo "Error inserting record: " . mysqli_error($conn);
+            }
         }
     }
 }
@@ -197,6 +204,7 @@ if (isset($_POST['delete'])) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
         echo '<script>alert("Employee Data Deleted")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=employee"</script>';
     }
 }
 ?>

@@ -1,122 +1,178 @@
-<?php include "dbconnect.php" ?>
+<?php include "dbconnect.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <title>Payroll</title>
     <style>
-        .container-fluid {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .col-lg-12 {
-            width: 100%;
-            box-sizing: border-box;
+            background-color: #f4f4f4;
         }
 
         .card {
-            border: 1px solid #ccc;
-            border-radius: 0.2rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
+            padding: 15px;
             background-color: #007bff;
             color: #fff;
-            padding: 0.75rem;
-            border-bottom: 1px solid #ccc;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            border-radius: 0.2rem;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            color: #fff;
-            background-color: #007bff;
-            border: 1px solid #007bff;
-        }
-
-        .btn-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border: 1px solid #dc3545;
-        }
-
-        .badge {
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.2rem;
-        }
-
-        .badge-primary {
-            color: #fff;
-            background-color: #007bff;
-        }
-
-        .badge-success {
-            color: #fff;
-            background-color: #28a745;
+        .card-body {
+            padding: 20px;
         }
 
         table {
             width: 100%;
-            margin-bottom: 1rem;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th,
         td {
-            padding: 0.75rem;
+            padding: 10px;
+            border: 1px solid #ddd;
             text-align: left;
-            border-bottom: 1px solid #ccc;
         }
 
-        /* Example styling for custom modal */
-        .custom-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        td.text-center {
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button.calculate_payroll {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        button.view_payroll,
+        button.edit_payroll,
+        button.remove_payroll {
+            background-color: transparent;
+            color: #fff;
+        }
+
+        center {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .modal-content {
-            background: #fff;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            width: 60%;
+            max-width: 400px;
+            background-color: #fefefe;
             padding: 20px;
-            border-radius: 5px;
-            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .close-button {
+        .modal-content {
+            text-align: center;
+        }
+
+        .close {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 0;
+            right: 0;
+            padding: 10px;
             cursor: pointer;
-            font-size: 20px;
         }
     </style>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this record?");
+        }
+        var modal = document.getElementById("payrollModal");
+
+        // Get the button that opens the modal
+        var addPayrollBtn = document.getElementById("new_payroll_btn");
+        var editPayrollBtns = document.querySelectorAll(".edit_payroll");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        addPayrollBtn.onclick = function() {
+            modal.style.display = "block";
+            document.getElementById("payrollForm").reset();
+            document.getElementById("payrollSubmit").innerText = "Add Payroll";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Function to handle edit payroll
+        function editPayroll(id, fromDate, toDate, type) {
+            modal.style.display = "block";
+            document.getElementById("payrollId").value = id;
+            document.getElementById("fromDate").value = fromDate;
+            document.getElementById("toDate").value = toDate;
+            document.getElementById("type").value = type;
+            document.getElementById("payrollSubmit").innerText = "Update Payroll";
+        }
+
+        // Attach event listeners to edit buttons
+        editPayrollBtns.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                var id = this.getAttribute("data-id");
+                var fromDate = this.getAttribute("data-fromDate");
+                var toDate = this.getAttribute("data-toDate");
+                var type = this.getAttribute("data-type");
+                editPayroll(id, fromDate, toDate, type);
+            });
+        });
+    </script>
 </head>
 
 <body>
     <div class="card">
         <div class="card-header">
             <span><b>Payroll List</b></span>
-            <button class="btn btn-primary btn-sm btn-block col-md-3 float-right" type="button" id="new_payroll_btn">Add Payroll</button>
+            <button class="add_payroll" type="button" id="new_payroll_btn"><i class="fa-solid fa-plus"></i> Add Payroll</button>
         </div>
         <div class="card-body">
-            <table id="table" class="table table-bordered table-striped">
+            <table id="table">
                 <thead>
                     <tr>
                         <th>Ref No</th>
@@ -128,7 +184,7 @@
                 </thead>
                 <tbody>
                     <?php
-                    $payroll = $conn->query("SELECT * FROM payroll order by date(date_from) desc") or die(mysqli_error($conn));
+                    $payroll = $conn->query("SELECT * FROM payroll order by date(date_from) desc");
                     while ($row = $payroll->fetch_array()) :
                     ?>
                         <tr>
@@ -136,21 +192,22 @@
                             <td><?php echo date("M d, Y", strtotime($row['date_from'])) ?></td>
                             <td><?php echo date("M d, Y", strtotime($row['date_to'])) ?></td>
                             <td class="text-center">
-                                <?php if ($row['status'] == 0) : ?>
-                                    <span>New</span>
-                                <?php else : ?>
-                                    <span>Calculated</span>
-                                <?php endif ?>
+                                <?php echo ($row['status'] == 0) ? '<span>New</span>' : '<span>Calculated</span>'; ?>
                             </td>
                             <td>
                                 <center>
                                     <?php if ($row['status'] == 0) : ?>
                                         <button class="calculate_payroll" data-id="<?php echo $row['id'] ?>">Calculate</button>
                                     <?php else : ?>
-                                        <button class="view_payroll" data-id="<?php echo $row['id'] ?>">View</button>
+                                        <button class="view_payroll" data-id="<?php echo $row['id'] ?>"><i class="fa-regular fa-eye"></i></button>
                                     <?php endif ?>
-                                    <button class="edit_payroll" data-id="<?php echo $row['id'] ?>">Edit</button>
-                                    <button class="remove_payroll" data-id="<?php echo $row['id'] ?>">Delete</button>
+                                    <button class="edit_payroll" data-id="<?php echo $row['id'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+                                    <form method="POST" onsubmit="return confirmDelete()">
+                                        <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" name="delete" class="remove_payroll">
+                                            <img src="./icons/delete-modified.png" alt="Delete">Delete
+                                        </button>
+                                    </form>
                                 </center>
                             </td>
                         </tr>
@@ -161,60 +218,58 @@
             </table>
         </div>
     </div>
+    <!-- Add this code inside the <body> tag, after the existing code -->
+    <div id="payrollModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form method="POST" id="payrollForm">
+                <input type="hidden" name="id" id="payrollId">
+                <label for="fromDate">Date From:</label>
+                <input type="date" name="fromDate" id="fromDate" required>
+                <label for="toDate">Date To:</label>
+                <input type="date" name="toDate" id="toDate" required>
+                <label for="type">Type:</label>
+                <select name="type" id="type" required>
+                    <option value="monthly">Monthly</option>
+                    <option value="semi-monthly">Semi-Monthly</option>
+                </select>
+                <button type="submit" name="submit" id="payrollSubmit">Submit</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
-<div role="document" class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title">Edit Employee</h5>
-      </div>
-      <div class="modal-body"><div class="container-fluid">
-	<div class="col-lg-12">
-		<form id="manage-payroll">
-				<input type="hidden" name="id" value="">
-				<div class="form-group">
-					<label for="" class="control-label">Date From :</label>
-					<input type="date" class="form-control" name="date_from">
-				</div>
-				<div class="form-group">
-					<label for="" class="control-label">Date To :</label>
-					<input type="date" class="form-control" name="date_to">
-				</div>
-				<div class="form-group">
-					<label for="" class="control-label">Payroll Type :</label>
-					<select name="type" class="custom-select browser-default" id="">
-						<option value="1">Monthly</option>
-						<option value="2">Semi-Monthly</option>
-					</select>
-				</div>
-		</form>
-	</div>
-</div>
 
-<script>
-	$('#manage-payroll').submit(function(e){
-		e.preventDefault()
-		start_load()
-		$.ajax({
-		url:'ajax.php?action=save_payroll',
-		method:"POST",
-		data:$(this).serialize(),
-		error:err=>console.log(),
-		success:function(resp){
-				if(resp == 1){
-					alert_toast("Payroll successfully saved","success");
-					setTimeout(function(){
-								location.reload()
-							},1000)
-				}
-		}
-	})
-	})
-</script></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="submit" onclick="$('#uni_modal form').submit()">Save</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-      </div>
-    </div>
+<?php
+if (isset($_POST['delete'])) {
+    $delete_id = $_POST['delete_id'];
+    $sql_delete = "DELETE FROM payroll WHERE id=$delete_id";
+    $result_delete = mysqli_query($conn, $sql_delete);
+
+    if (!$result_delete) {
+        echo "Error deleting record: " . mysqli_error($conn);
+    } else {
+        echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+    }
+}
+
+if (isset($_POST['submit'])) {
+    $edit_id = $_POST['id'];
+    if (!empty($edit_id)) {
+        $sql_update = "UPDATE `payroll` SET `date_from`='$date_from',`date_to`='$date_to',`type`='$type' WHERE  id=$edit_id";
+        $result_update = mysqli_query($conn, $sql_update);
+        if ($result_update) {
+            echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+        }
+    } else {
+        $ref_no = date('Y') . '-' . mt_rand(1, 9999);
+        $date = date("Y/m/d");
+        $sql_insert = "INSERT INTO `payroll`(`ref_no`, `date_from`, `date_to`, `type`, `status`, `date_created`) VALUES ('$ref_no','$date_from','$date_to','$type',0,'$date')";
+        $result_insert = mysqli_query($conn, $sql_insert);
+        if ($result_insert) {
+            echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+        }
+    }
+}
+?>

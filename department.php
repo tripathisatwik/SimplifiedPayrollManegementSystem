@@ -90,17 +90,24 @@
 if (isset($_POST['submit'])) {
 	$edit_id = $_POST['id'];
 	$name = $_POST['name'];
-	if (!empty($edit_id)) {
-		$sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
-		$result_update = mysqli_query($conn, $sql_update);
-		if ($result_update) {
-			echo '<script>alert("Department Updated")</script>';
-		}
+	if (empty($name)) {
+		echo '<script>alert("All fields required")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
 	} else {
-		$sql_insert = "INSERT INTO department (dname) VALUES ('$name')";
-		$result_insert = mysqli_query($conn, $sql_insert);
-		if ($result_insert) {
-			echo '<script>alert("New Department Created")</script>';
+		if (!empty($edit_id)) {
+			$sql_update = "UPDATE department SET dname='$name' WHERE id=$edit_id";
+			$result_update = mysqli_query($conn, $sql_update);
+			if ($result_update) {
+				echo '<script>alert("Department Updated")</script>';
+				echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
+			}
+		} else {
+			$sql_insert = "INSERT INTO department (dname) VALUES ('$name')";
+			$result_insert = mysqli_query($conn, $sql_insert);
+			if ($result_insert) {
+				echo '<script>alert("New Department Created")</script>';
+				echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
+			}
 		}
 	}
 }
@@ -114,6 +121,7 @@ if (isset($_POST['delete'])) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
 		echo '<script>alert("Department Deleted")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=department"</script>';
 	}
 }
 ?>

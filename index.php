@@ -17,7 +17,7 @@
     }
   </style>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="https://kit.fontawesome.com/d902124516.js" crossorigin="anonymous"></script>
+
 </head>
 <?php
 session_start();

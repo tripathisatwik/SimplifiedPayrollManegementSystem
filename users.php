@@ -109,7 +109,10 @@ if (isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$usertype = $_POST['type'];
-
+	if (empty($name) || empty($username) || empty($password)) {
+        echo '<script>alert("All fields are required")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
+    }
 	if (!empty($edit_id)) {
 		if (!empty($password)) {
 			$hash = md5($password);
@@ -121,6 +124,7 @@ if (isset($_POST['submit'])) {
 
 		if ($result_update) {
 			echo '<script>alert("User Updated")</script>';
+			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
 		} else {
 			echo "Error updating record: " . mysqli_error($conn);
 		}
@@ -132,8 +136,10 @@ if (isset($_POST['submit'])) {
 
 		if ($result_insert) {
 			echo '<script>alert("New User Added")</script>';
+			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
 		} else {
 			echo '<script>alert("User already exist")</script>';
+			echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
 		}
 	}
 }
@@ -147,6 +153,7 @@ if (isset($_POST['delete'])) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
 		echo '<script>alert("User Deleted")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=users"</script>';
 	}
 }
 ?>

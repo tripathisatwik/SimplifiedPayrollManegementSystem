@@ -102,21 +102,30 @@ if (isset($_POST['submit'])) {
     $edit_id = $_POST['id'];
     $name = $_POST['name'];
     $dept = $_POST['department'];
-    if (!empty($edit_id)) {
-        $sql_update = "UPDATE position SET department_id='$dept', name='$name' WHERE id='$edit_id'";
-        $result_update = mysqli_query($conn, $sql_update);
-        if ($result_update) {
-            echo '<script>alert("Position Updated")</script>';
+    if (empty($name)) {
+        echo '<script>alert("All fields required")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+    }else{
+        if (!empty($edit_id)) {
+            $sql_update = "UPDATE position SET department_id='$dept', name='$name' WHERE id='$edit_id'";
+            $result_update = mysqli_query($conn, $sql_update);
+            if ($result_update) {
+                echo '<script>alert("Position Updated")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            } else {
+                echo '<script>console.log("Error updating record!");</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            }
         } else {
-            echo '<script>console.log("Error updating record!");</script>';
-        }
-    } else {
-        $sql_insert = "INSERT INTO position (department_id, name) VALUES ('$dept', '$name')";
-        $result_insert = mysqli_query($conn, $sql_insert);
-        if ($result_insert) {
-            echo '<script>alert("New Position Added")</script>';
-        } else {
-            echo '<script>console.log("Error inserting record!");</script>';
+            $sql_insert = "INSERT INTO position (department_id, name) VALUES ('$dept', '$name')";
+            $result_insert = mysqli_query($conn, $sql_insert);
+            if ($result_insert) {
+                echo '<script>alert("New Position Added")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            } else {
+                echo '<script>console.log("Error inserting record!");</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
+            }
         }
     }
 }
@@ -127,8 +136,10 @@ if (isset($_POST['delete'])) {
     $result_delete = mysqli_query($conn, $sql_delete);
     if (!$result_delete) {
         echo '<script>console.log("Error deleting record!");</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
     } else {
         echo '<script>alert("Position Deleted")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=position"</script>';
     }
 }
 ?>

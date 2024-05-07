@@ -103,20 +103,27 @@ if (isset($_POST['submit'])) {
     $edit_id = $_POST['id'];
     $name = $_POST['name'];
     $description = $_POST['description'];
-    $sql = "select * from deductions  where id='$edit_id'";
-    $result = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($result);
-    if ($num > 0) {
-        $sql_update = "UPDATE `deductions` SET `deduction`='$name',`description`='$description' WHERE id='$edit_id' ";
-        $result_update = mysqli_query($conn, $sql_update);
-        if ($result_update) {
-            echo '<script>alert("Deduction Data Updated")</script>';
-        }
+    if (empty($name) || empty($description)) {
+        echo '<script>alert("All fields are required")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=deduction"</script>';
     } else {
-        $sql_insert = "INSERT INTO `deductions`(`id`, `deduction`, `description`) VALUES ('','name','$description')";
-        $result_insert = mysqli_query($conn, $sql_insert);
-        if ($result_insert) {
-            echo '<script>alert("New Deduction Added")</script>';
+        $sql = "select * from deductions  where id='$edit_id'";
+        $result = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($result);
+        if ($num > 0) {
+            $sql_update = "UPDATE `deductions` SET `deduction`='$name',`description`='$description' WHERE id='$edit_id' ";
+            $result_update = mysqli_query($conn, $sql_update);
+            if ($result_update) {
+                echo '<script>alert("Deduction Data Updated")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=deduction"</script>';
+            }
+        } else {
+            $sql_insert = "INSERT INTO `deductions`(`id`, `deduction`, `description`) VALUES ('','name','$description')";
+            $result_insert = mysqli_query($conn, $sql_insert);
+            if ($result_insert) {
+                echo '<script>alert("New Deduction Added")</script>';
+                echo '<script>window.location="http://localhost/final/index.php?page=deduction"</script>';
+            }
         }
     }
 }
@@ -130,6 +137,7 @@ if (isset($_POST['delete'])) {
         echo "Error deleting record: " . mysqli_error($conn);
     } else {
         echo '<script>alert("Deduction Deleted")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=deduction"</script>';
     }
 }
 ?>
