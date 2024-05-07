@@ -10,6 +10,7 @@
         form {
             display: inline-block;
             vertical-align: middle;
+            color: black;
         }
     </style>
     <script>
@@ -125,8 +126,14 @@
                     ?>
                         <td class="action-buttons">
                             <button name="edit" id="edit_empolyee" data-id="<?php echo $row['id']; ?>" data-employee_no="<?php echo $row['employee_no'] ?>" data-firstname="<?php echo $row['firstname'] ?>" data-middlename="<?php echo $row['middlename'] ?>" data-lastname="<?php echo $row['lastname'] ?>" data-department="<?php echo $row['department_id'] ?>" data-position="<?php echo $row['position_id'] ?>" data-salary="<?php echo $row['salary'] ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
-                            <button class="manage_employee" id="manage_employee" type="button">
-                                <a href="http://localhost/final/index.php?page=manage_employee"><img src="./icons/profits-modified.png" alt=""></a>
+                            <button class="manage_employee" id="manage_employee_allowance" type="button">
+                                <a href="http://localhost/final/index.php?page=manage_employee_allowance"><img src="./icons/plus.png" alt="+"><img src="./icons/profits-modified.png" alt="Allownce"></a>
+                                <?php
+                                $_SESSION['view_id'] = $row['id'];
+                                ?>
+                            </button>
+                            <button class="manage_employee" id="manage_employee_deductions" type="button">
+                                <a href="http://localhost/final/index.php?page=manage_employee_deductions"><img src="./icons/minus.png" alt="-"><img src="./icons/profits-modified.png" alt="Deductions"></a>
                                 <?php
                                 $_SESSION['view_id'] = $row['id'];
                                 ?>

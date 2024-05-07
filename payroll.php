@@ -14,7 +14,7 @@
 	</style>
 	<script>
 		function reset() {
-			$('#manage-allowance').get(0).reset();
+			$('#manage-payroll').get(0).reset();
 		}
 
 		function confirmDelete() {
@@ -29,6 +29,7 @@
 				cat.find("[name='id']").val($(this).attr('data-id'));
 				cat.find("[name='datefrom']").val($(this).attr('data-datefrom'));
 				cat.find("[name='dateto']").val($(this).attr('data-dateto'));
+				cat.find("[name='type']").val($(this).attr('data-type'));
 				end_load();
 			});
 		});
@@ -81,24 +82,27 @@
 						echo "<td>" . $row['date_from'] . "</td>";
 						echo "<td>" . $row['date_to'] . "</td>";
 						echo "<td class='text-center'>";
-						if($row['status']==0){
+						if ($row['status'] == 0) {
 							echo "<img src='./icons/new.png' alt='new' style='height:20px; width: 60px;'>";
-						}else if($row['status']==1){
+						} else if ($row['status'] == 1) {
 							echo "<img src='./icons/calculated.png' alt='calculated' style='height:25px; width: 60px;'>";
 						};
 						echo "</td>";
 						echo "<td class='action-buttons'>";
-						if($row['status']==0){
-							echo "<button><img src='./icons/accounting.png' alt='Calculate'></button>";
-						}else if($row['status']==1){
-							echo "<button><img src='./icons/watch.png' alt='View'></button>";
+						$p_id = $row['id'];
+						if ($row['status'] == 0) {
+							echo "<button><img src='./icons/accounting.png' alt='Calculate'>" . calculate_payroll($p_id, $conn) . "</button>";
+						} else if ($row['status'] == 1) {
+							echo "<button><a href='http://localhost/final/index.php?page=payroll_items'><img src='./icons/watch.png' alt='View'>";
+							$_SESSION["payroll"] = $p_id;
+							echo "</a></button>";
 						};
 				?>
-							<button type="button" data-id="<?php echo $row['id']; ?>" data-datefrom="<?php echo $row['date_from'] ?>" data-dateto="<?php echo $row['date_to']; ?>" data-type="<?php echo $row['type']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
-							<form method="post" onsubmit="return confirmDelete()">
-								<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-								<button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
-							</form>
+						<button type="button" data-id="<?php echo $row['id']; ?>" data-datefrom="<?php echo $row['date_from'] ?>" data-dateto="<?php echo $row['date_to']; ?>" data-type="<?php echo $row['type']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+						<form method="post" onsubmit="return confirmDelete()">
+							<input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+							<button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
+						</form>
 						</td>
 						</tr>
 				<?php
@@ -108,7 +112,7 @@
 			</table>
 		</div>
 	</div>
-	
+
 </body>
 
 
@@ -116,12 +120,31 @@
 
 <?php
 if (isset($_POST['submit'])) {
+	if (empty($_POST['datefrom']) || empty($_POST['dateto']) || empty($_POST['type'])) {
+		echo '<script>alert("All fields are required")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+		exit();
+	}
+
 	$edit_id = $_POST['id'];
 	$refno;
-	$date_from = $_POST['date_form'];
-	$date_to = $_POST['date_to'];
-	$type=$_POST["type"];
+	$date_from = $_POST['datefrom'];
+	$date_to = $_POST['dateto'];
+	$type = $_POST["type"];
 	$datenow = date("Y-m-d H:i", time());
+
+	if ($type == 2 && strtotime($date_to) != strtotime("+15 days", strtotime($date_from))) {
+		echo '<script>alert("For Semi-Monthly, Date To should be exactly 15 days greater than Date From")</script>';
+		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+		exit();
+	}
+
+	if ($type == 1 && strtotime($date_to) != strtotime("+30 days", strtotime($date_from))) {
+        echo '<script>alert("For Monthly, Date To should be exactly 30 days greater than Date From")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+        exit();
+    }
+
 	if (empty($name) || empty($description)) {
 		echo '<script>alert("All fields are required")</script>';
 		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
@@ -156,9 +179,114 @@ if (isset($_POST['delete'])) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
 		echo '<script>alert("Allowance Deleted")</script>';
-		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>'; 
+		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
 	}
 }
 
+function calculate_payroll($id, $conn)
+{
+	$am_in = "09:00";
+	$pm_out = "17:00";
+	mysqli_query($conn, "DELETE FROM payroll_items where payroll_id=" . $id);
 
+	$pay_result = mysqli_query($conn, "SELECT * FROM payroll where id = " . $id);
+	$pay = mysqli_fetch_array($pay_result);
+
+	$employee_result = mysqli_query($conn, "SELECT * FROM employee");
+
+	if ($pay['type'] == 1)
+		$dm = 22;
+	else
+		$dm = 11;
+
+	$calc_days = abs(strtotime($pay['date_to'] . " 23:59:59")) - strtotime($pay['date_from'] . " 00:00:00 -1 day");
+	$calc_days = floor($calc_days / (60 * 60 * 24));
+
+	$att_result = mysqli_query($conn, "SELECT * FROM attendance where date(datetime_log) between '" . $pay['date_from'] . "' and '" . $pay['date_from'] . "' order by UNIX_TIMESTAMP(datetime_log) asc  ");
+	while ($row = mysqli_fetch_array($att_result)) {
+		$date = date("Y-m-d", strtotime($row['datetime_log']));
+		if ($row['log_type'] == 1) {
+			if (!isset($attendance[$row['employee_id'] . "_" . $date]['log'][$row['log_type']]))
+				$attendance[$row['employee_id'] . "_" . $date]['log'][$row['log_type']] = $row['datetime_log'];
+		} else {
+			$attendance[$row['employee_id'] . "_" . $date]['log'][$row['log_type']] = $row['datetime_log'];
+		}
+	}
+
+	$deductions_result = mysqli_query($conn, "SELECT * FROM employee_deductions where (`type` = '" . $pay['type'] . "' or (date(effective_date) between '" . $pay['date_from'] . "' and '" . $pay['date_from'] . "' ) ) ");
+	$allowances_result = mysqli_query($conn, "SELECT * FROM employee_allowances where (`type` = '" . $pay['type'] . "' or (date(effective_date) between '" . $pay['date_from'] . "' and '" . $pay['date_from'] . "' ) ) ");
+
+	while ($row = mysqli_fetch_assoc($deductions_result)) {
+		$ded[$row['employee_id']][] = array('did' => $row['deduction_id'], "amount" => $row['amount']);
+	}
+	while ($row = mysqli_fetch_assoc($allowances_result)) {
+		$allow[$row['employee_id']][] = array('aid' => $row['allowance_id'], "amount" => $row['amount']);
+	}
+
+	while ($row = mysqli_fetch_assoc($employee_result)) {
+		$salary = $row['salary'];
+		$daily = $salary / 22;
+		$min = (($salary / 22) / 8) / 60;
+		$absent = 0;
+		$late = 0;
+		$dp = 22 / $pay['type'];
+		$present = 0;
+		$net = 0;
+		$allow_amount = 0;
+		$ded_amount = 0;
+
+		for ($i = 0; $i < $calc_days; $i++) {
+			$dd = date("Y-m-d", strtotime($pay['date_from'] . " +" . $i . " days"));
+			$count = 0;
+			$p = 0;
+			if (isset($attendance[$row['id'] . "_" . $dd]['log']))
+				$count = count($attendance[$row['id'] . "_" . $dd]['log']);
+
+			if (isset($attendance[$row['id'] . "_" . $dd]['log'][1])) {
+				$att_mn = abs(strtotime($attendance[$row['id'] . "_" . $dd]['log'][2])) - strtotime($attendance[$row['id'] . "_" . $dd]['log'][1]);
+				$att_mn = floor($att_mn / 60);
+				$net += ($att_mn * $min);
+				$late += (240 - $att_mn);
+				$present += .5;
+			}
+		}
+
+		$ded_arr = array();
+		$all_arr = array();
+
+		if (isset($allow[$row['id']])) {
+			foreach ($allow[$row['id']] as $arow) {
+				$all_arr[] = $arow;
+				$net += $arow['amount'];
+				$allow_amount += $arow['amount'];
+			}
+		}
+		if (isset($ded[$row['id']])) {
+			foreach ($ded[$row['id']] as $drow) {
+				$ded_arr[] = $drow;
+				$net -= $drow['amount'];
+				$ded_amount += $drow['amount'];
+			}
+		}
+
+		$absent = $dp - $present;
+		$data = " payroll_id = '" . $pay['id'] . "' ";
+		$data .= ", employee_id = '" . $row['id'] . "' ";
+		$data .= ", absent = '$absent' ";
+		$data .= ", present = '$present' ";
+		$data .= ", late = '$late' ";
+		$data .= ", salary = '$salary' ";
+		$data .= ", allowance_amount = '$allow_amount' ";
+		$data .= ", deduction_amount = '$ded_amount' ";
+		$data .= ", allowances = '" . json_encode($all_arr) . "' ";
+		$data .= ", deductions = '" . json_encode($ded_arr) . "' ";
+		$data .= ", net = '$net' ";
+		$save[] = mysqli_query($conn, "INSERT INTO payroll_items set " . $data);
+	}
+
+	if (isset($save)) {
+		mysqli_query($conn, "UPDATE payroll set status = 1 where id = " . $pay['id']);
+		return 1;
+	}
+}
 ?>
