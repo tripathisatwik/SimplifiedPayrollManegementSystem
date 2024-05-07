@@ -33,13 +33,25 @@
 				end_load();
 			});
 		});
+
+		function validateDate() {
+			var fromDate = document.getElementsByName('datefrom')[0].value;
+			var toDate = document.getElementsByName('dateto')[0].value;
+			var currentDate = new Date().toISOString().split('T')[0];
+
+			if (fromDate > currentDate || toDate > currentDate) {
+				alert("Please select only past dates.");
+				return false;
+			}
+			return true;
+		}
 	</script>
 </head>
 
 <body>
 	<div class="depmain">
 		<div class="depleft">
-			<form action="http://localhost/final/index.php?page=payroll" method="post" id="manage-payroll">
+			<form action="http://localhost/final/index.php?page=payroll" method="post" id="manage-payroll" onsubmit="return validateDate()">
 				<div class="depleftup">Payroll</div>
 				<div class="depleftmid">
 					<div>
@@ -127,25 +139,31 @@ if (isset($_POST['submit'])) {
 	}
 
 	$edit_id = $_POST['id'];
-	$refno;
+	$refno = date('Y') .'-'. mt_rand(1,9999);
 	$date_from = $_POST['datefrom'];
 	$date_to = $_POST['dateto'];
 	$type = $_POST["type"];
 	$datenow = date("Y-m-d H:i", time());
 
-	if ($type == 2 && strtotime($date_to) != strtotime("+15 days", strtotime($date_from))) {
-		echo '<script>alert("For Semi-Monthly, Date To should be exactly 15 days greater than Date From")</script>';
-		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
-		exit();
+	if ($type == 2) {
+		$expectedDateTo = date('Y-m-d', strtotime($date_from . ' +15 days'));
+		if ($date_to != $expectedDateTo) {
+			echo '<script>alert("For Semi-Monthly, Date To should be exactly 15 days greater than Date From")</script>';
+			echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+			exit();
+		}
+	} elseif ($type == 1) {
+		$daysInMonth = date('t', strtotime($date_from))-1;
+		$expectedDateTo = date('Y-m-d', strtotime($date_from . ' +' . $daysInMonth . ' days'));
+		if ($date_to != $expectedDateTo) {
+			echo '<script>alert("For Monthly, Date To should be exactly ' . $daysInMonth . ' days greater than Date From")</script>';
+			echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
+			exit();
+		}
 	}
+	
 
-	if ($type == 1 && strtotime($date_to) != strtotime("+30 days", strtotime($date_from))) {
-        echo '<script>alert("For Monthly, Date To should be exactly 30 days greater than Date From")</script>';
-        echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
-        exit();
-    }
-
-	if (empty($name) || empty($description)) {
+	if (empty($date_to) || empty($date_from) || empty($type)) {
 		echo '<script>alert("All fields are required")</script>';
 		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
 	} else {
@@ -172,10 +190,9 @@ if (isset($_POST['submit'])) {
 
 if (isset($_POST['delete'])) {
 	$delete_id = $_POST['delete_id'];
-	$sql_delete = "DELETE FROM payroll WHERE id=$delete_id";
-	$result_delete = mysqli_query($conn, $sql_delete);
-
-	if (!$result_delete) {
+	$result_delete1 = mysqli_query($conn, "DELETE FROM payroll WHERE id=$delete_id");
+	$result_delete2 = mysqli_query($conn, "DELETE FROM payroll_items WHERE payroll_id=$delete_id");
+	if (!$result_delete1 && !$result_delete2) {
 		echo "Error deleting record: " . mysqli_error($conn);
 	} else {
 		echo '<script>alert("Allowance Deleted")</script>';
@@ -183,8 +200,7 @@ if (isset($_POST['delete'])) {
 	}
 }
 
-function calculate_payroll($id, $conn)
-{
+function calculate_payroll($id, $conn) {
 	$am_in = "09:00";
 	$pm_out = "17:00";
 	mysqli_query($conn, "DELETE FROM payroll_items where payroll_id=" . $id);
@@ -282,6 +298,7 @@ function calculate_payroll($id, $conn)
 		$data .= ", deductions = '" . json_encode($ded_arr) . "' ";
 		$data .= ", net = '$net' ";
 		$save[] = mysqli_query($conn, "INSERT INTO payroll_items set " . $data);
+		echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
 	}
 
 	if (isset($save)) {
