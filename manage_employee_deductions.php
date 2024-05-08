@@ -10,11 +10,11 @@ if (isset($_POST['submit'])) {
     $deductionid = $_POST['name'];
     $deductiontype = $_POST['type'];
     $deductionamount = $_POST['amount'];
-    
-    if ( empty($deductionamount)) {
+
+    if (empty($deductionamount && $deductionid && $deductiontype)) {
         echo '<script>alert("All fields are required")</script>';
         echo '<script>window.location="http://localhost/final/index.php?page=manage_employee_deductions"</script>';
-        exit(); 
+        exit();
     }
 
     $edit_id = $_POST['id'];
@@ -65,14 +65,15 @@ if (isset($_POST['delete'])) {
             display: inline-block;
             vertical-align: middle;
         }
+
         .back-btn {
-			background-color: #007bff;
+            background-color: #007bff;
             border-radius: 4px;
             color: white;
-			padding: 10px 20px;
-			text-align: center;
+            padding: 10px 20px;
+            text-align: center;
             border: none;
-		}
+        }
     </style>
     <script>
         function reset() {
@@ -131,20 +132,22 @@ if (isset($_POST['delete'])) {
             </form>
         </div>
         <div class="depright">
-            <?php
-            $sno = 1;
-            $result2 = mysqli_query($conn, "SELECT * FROM `employee_deductions` INNER JOIN deductions on deduction_id=deductions.id where employee_id = " . $id);
-            if ($row = $result2->fetch_assoc()) {
-            ?>
-                <table>
-                    <tr>
-                        <th>S.no.</th>
-                        <th>Type of Deductions</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
+            <table>
+                <tr>
+                    <th>S.no.</th>
+                    <th>Name</th>
+                    <th>Type of Deductions</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                $sno = 1;
+                $result2 = mysqli_query($conn, "SELECT * FROM `employee_deductions` INNER JOIN deductions on deduction_id=deductions.id where employee_id = " . $id);
+                while ($row = $result2->fetch_assoc()) {
+                ?>
                     <tr>
                         <td><?php echo $sno++ ?></td>
+                        <td><?php echo $row['deduction'] ?></td>
                         <td>
                             <?php
                             if ($row['type'] == 1) {
@@ -158,15 +161,15 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td><?php echo $row['amount'] ?></td>
                         <td>
-                            <button name="edit" id="edit_deduction" data-id="<?php echo $row['deduction_id'] ?>" data-name="<?php echo $row['deduction'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+                            <button name="edit" id="edit_deduction" data-id="<?php echo $row['ed_id'] ?>" data-name="<?php echo $row['deduction'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['ed_id']; ?>">
                                 <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                             </form>
                         </td>
                     </tr>
-                </table>
-            <?php } ?>
+                <?php } ?>
+            </table>
         </div>
     </div>
 </body>

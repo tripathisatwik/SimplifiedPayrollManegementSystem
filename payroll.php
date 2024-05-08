@@ -53,6 +53,7 @@
             data: { id: id },
             success: function(response) {
                 alert('Payroll calculation successful');
+				location.reload();
             },
             error: function(xhr, status, error) {
                 alert('Error calculating payroll: ' + error);
@@ -187,16 +188,14 @@ if (isset($_POST['submit'])) {
 		$result = mysqli_query($conn, $sql);
 		$num = mysqli_num_rows($result);
 		if ($num > 0) {
-			$sql_update = "UPDATE `payroll` SET `date_from`='$date_from',`date_to`='$date_to',`type`='$type',`status`='0' WHERE id='$edit_id' ";
-			// Set status to 'New' explicitly
+			$sql_update = "UPDATE `payroll` SET `date_from`='$date_from',`date_to`='$date_to',`type`='$type',`status`='0' WHERE id='$edit_id' ";		// Set status to 'New' explicitly
 			$result_update = mysqli_query($conn, $sql_update);
 			if ($result_update) {
 				echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
-				echo '<script>alert("Allowance Data Updated")</script>';
+				echo '<script>alert("Payroll Data Updated")</script>';
 			}
 		} else {
-			$sql_insert = "INSERT INTO `payroll`(`id`, `ref_no`, `date_from`,`date_to`,`type`,`status`,`date_created`) VALUES ('','$refno','$date_from','$date_to','$type','0','$datenow')";
-			// Set status to 'New' explicitly
+			$sql_insert = "INSERT INTO `payroll`(`id`, `ref_no`, `date_from`,`date_to`,`type`,`status`,`date_created`) VALUES ('','$refno','$date_from','$date_to','$type','0','$datenow')";			// Set status to 'New' explicitly
 			$result_insert = mysqli_query($conn, $sql_insert);
 			if ($result_insert) {
 				echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';

@@ -94,6 +94,7 @@ while ($pay = mysqli_fetch_assoc($result)) {
 		}
 
 		.modal-content {
+			border-radius: 8px;
 			background-color: #fefefe;
 			margin: auto;
 			padding: 20px;
@@ -102,21 +103,7 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			height: 500px;
 		}
 
-		.close {
-			color: #aaaaaa;
-			position: absolute;
-			top: 95px;
-			right: 135px;
-			font-size: 28px;
-			font-weight: bold;
-		}
 
-		.close:hover,
-		.close:focus {
-			color: #000;
-			text-decoration: none;
-			cursor: pointer;
-		}
 	</style>
 	<button class="back-btn"><a href='http://localhost/final/index.php?page=payroll'>Back</a></button>
 	<div class="primary">
@@ -169,7 +156,6 @@ while ($pay = mysqli_fetch_assoc($result)) {
 	</div>
 <?php } ?>
 <div id="viewPayslipModal" class="modal">
-	<span class="close">&times;</span>
 	<div class="modal-content">
 	</div>
 </div>
@@ -191,10 +177,6 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			var payrollId = <?php echo json_encode($_SESSION['payroll']); ?>;
 			modal.querySelector('.modal-content').innerHTML = '<iframe src="view_payslip.php?id=' + payrollId + '" width="100%" height="100%"></iframe>';
 		}
-	}
-
-	span.onclick = function() {
-		modal.style.display = "none";
 	}
 
 	window.onclick = function(event) {

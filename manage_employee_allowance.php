@@ -10,16 +10,16 @@ if (isset($_POST['submit'])) {
     $allowanceid = $_POST['name'];
     $allowancetype = $_POST['type'];
     $allowanceamount = $_POST['amount'];
-    
-    if ( empty($allowanceamount)) {
+
+    if (empty($allowanceamount && $allowanceid && $allowancetype)) {
         echo '<script>alert("All fields are required")</script>';
         echo '<script>window.location="http://localhost/final/index.php?page=manage_employee_allowance"</script>';
-        exit(); 
+        exit();
     }
 
     $edit_id = $_POST['id'];
     if ($edit_id) {
-        $sql_update = "UPDATE `employee_allowances` SET `employee_id`='$id', `allowance_id`='$allowanceid', `type`='$allowancetype', `amount`='$allowanceamount', `effective_date`=NOW() WHERE ea_id='$edit_id'";
+        $sql_update = "UPDATE `employee_allowances` SET `allowance_id`='$allowanceid', `type`='$allowancetype', `amount`='$allowanceamount', `effective_date`=NOW() WHERE ea_id='$edit_id'";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
             echo '<script>alert("Allowance Data Updated")</script>';
@@ -65,14 +65,15 @@ if (isset($_POST['delete'])) {
             display: inline-block;
             vertical-align: middle;
         }
+
         .back-btn {
-			background-color: #007bff;
+            background-color: #007bff;
             border-radius: 4px;
             color: white;
-			padding: 10px 20px;
-			text-align: center;
+            padding: 10px 20px;
+            text-align: center;
             border: none;
-		}
+        }
     </style>
     <script>
         function reset() {
@@ -131,20 +132,23 @@ if (isset($_POST['delete'])) {
             </form>
         </div>
         <div class="depright">
-            <?php
-            $sno = 1;
-            $result2 = mysqli_query($conn, "SELECT * FROM `employee_allowances` INNER JOIN allowances on allowance_id=allowances.id where employee_id = " . $id);
-            if ($row = $result2->fetch_assoc()) {
-            ?>
-                <table>
-                    <tr>
-                        <th>S.no.</th>
-                        <th>Type of Allowance</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
+
+            <table>
+                <tr>
+                    <th>S.no.</th>
+                    <th>Name</th>
+                    <th>Type of Allowance</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                $sno = 1;
+                $result2 = mysqli_query($conn, "SELECT * FROM `employee_allowances` INNER JOIN allowances on allowance_id=allowances.id where employee_id = " . $id);
+                while ($row = $result2->fetch_assoc()) {
+                ?>
                     <tr>
                         <td><?php echo $sno++ ?></td>
+                        <td><?php echo $row['allowance'] ?></td>
                         <td>
                             <?php
                             if ($row['type'] == 1) {
@@ -158,15 +162,15 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td><?php echo $row['amount'] ?></td>
                         <td>
-                            <button name="edit" id="edit_allowance" data-id="<?php echo $row['allowance_id'] ?>" data-name="<?php echo $row['allowance'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+                            <button name="edit" id="edit_allowance" data-id="<?php echo $row['ea_id'] ?>" data-name="<?php echo $row['allowance'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['ea_id']; ?>">
                                 <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>
                             </form>
                         </td>
                     </tr>
-                </table>
-            <?php } ?>
+                <?php } ?>
+            </table>
         </div>
     </div>
 </body>
