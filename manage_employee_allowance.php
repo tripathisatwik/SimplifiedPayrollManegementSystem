@@ -10,8 +10,17 @@ if (isset($_POST['submit'])) {
     $allowanceid = $_POST['name'];
     $allowancetype = $_POST['type'];
     $allowanceamount = $_POST['amount'];
+    $effective_date = $_POST['effective_date'];
 
-    if (empty($allowanceamount && $allowanceid && $allowancetype)) {
+    $current_date = date("Y-m-d");
+    $min_date = date("Y-m-d", strtotime("+15 days", strtotime($current_date)));
+    if ($effective_date < $min_date) {
+        echo '<script>alert("Effective date must be at least 15 days in the future")</script>';
+        echo '<script>window.location="http://localhost/final/index.php?page=manage_employee_allowance"</script>';
+        exit();
+    }
+    
+    if (empty($allowanceamount && $allowanceid && $allowancetype && $effective_date)) {
         echo '<script>alert("All fields are required")</script>';
         echo '<script>window.location="http://localhost/final/index.php?page=manage_employee_allowance"</script>';
         exit();
@@ -19,7 +28,7 @@ if (isset($_POST['submit'])) {
 
     $edit_id = $_POST['id'];
     if ($edit_id) {
-        $sql_update = "UPDATE `employee_allowances` SET `allowance_id`='$allowanceid', `type`='$allowancetype', `amount`='$allowanceamount', `effective_date`=NOW() WHERE ea_id='$edit_id'";
+        $sql_update = "UPDATE `employee_allowances` SET `allowance_id`='$allowanceid', `type`='$allowancetype', `amount`='$allowanceamount', `effective_date`='$effective_date' WHERE ea_id='$edit_id'";
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
             echo '<script>alert("Allowance Data Updated")</script>';
@@ -29,7 +38,7 @@ if (isset($_POST['submit'])) {
             echo "Error updating record: " . mysqli_error($conn);
         }
     } else {
-        $sql_insert = "INSERT INTO `employee_allowances`(`employee_id`, `allowance_id`, `type`, `amount`, `effective_date`, `date_created`) VALUES ('$id', '$allowanceid', '$allowancetype', '$allowanceamount', NOW(), NOW())";
+        $sql_insert = "INSERT INTO `employee_allowances`(`employee_id`, `allowance_id`, `type`, `amount`, `effective_date`, `date_created`) VALUES ('$id', '$allowanceid', '$allowancetype', '$allowanceamount','$effective_date', NOW())";
         $result_insert = mysqli_query($conn, $sql_insert);
         if ($result_insert) {
             echo '<script>window.location="http://localhost/final/index.php?page=manage_employee_allowance"</script>';
@@ -93,6 +102,7 @@ if (isset($_POST['delete'])) {
                 cat.find("[name='allowance']").val($(this).attr('data-name'));
                 cat.find("[name='type']").val($(this).attr('data-type'));
                 cat.find("[name='amount']").val($(this).attr('data-amount'));
+                cat.find("[name='effective_date']").val($(this).attr('data-effectivedate'));
                 end_load();
             });
         });
@@ -124,6 +134,8 @@ if (isset($_POST['delete'])) {
                     </select>
                     <label for="amount">Amount:</label>
                     <input type="number" name="amount" id="amount" required>
+                    <label for="effectivedate">Effective Date</label>
+                    <input type="date" name="effective_date" id="effective_date" required> 
                 </div>
                 <div class="depleftdown">
                     <input type="submit" name="submit" value="Add Allowance">
@@ -162,7 +174,7 @@ if (isset($_POST['delete'])) {
                         </td>
                         <td><?php echo $row['amount'] ?></td>
                         <td>
-                            <button name="edit" id="edit_allowance" data-id="<?php echo $row['ea_id'] ?>" data-name="<?php echo $row['allowance'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
+                            <button name="edit" id="edit_allowance" data-id="<?php echo $row['ea_id'] ?>" data-name="<?php echo $row['allowance'] ?>" data-type="<?php echo $row['type']; ?>" data-amount="<?php echo $row['amount']; ?>" data-effectivedate="<?php echo $row['effective_date']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
                             <form method="post" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['ea_id']; ?>">
                                 <button type="submit" name="delete"><img src="./icons/delete-modified.png" alt="Delete"></button>

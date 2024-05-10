@@ -47,19 +47,21 @@
 		}
 
 		function calculatePayroll(id) {
-        $.ajax({
-            url: 'calculate_payroll.php',
-            type: 'POST',
-            data: { id: id },
-            success: function(response) {
-                alert('Payroll calculation successful');
-				location.reload();
-            },
-            error: function(xhr, status, error) {
-                alert('Error calculating payroll: ' + error);
-            }
-        });
-    }
+			$.ajax({
+				url: 'calculate_payroll.php',
+				type: 'POST',
+				data: {
+					id: id
+				},
+				success: function(response) {
+					alert('Payroll calculation successful');
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+					alert('Error calculating payroll: ' + error);
+				}
+			});
+		}
 	</script>
 </head>
 
@@ -119,12 +121,13 @@
 						$p_id = $row['id'];
 						if ($row['status'] == 0) {
 							echo "<button onclick='calculatePayroll(";
-							echo $row['id']; 
+							echo $row['id'];
 							echo ")'><img src='./icons/accounting.png' alt='Calculate'></button>";
 						} else if ($row['status'] == 1) {
 							echo "<button><a href='http://localhost/final/index.php?page=payroll_items'><img src='./icons/watch.png' alt='View'>";
 							$_SESSION["payroll"] = $p_id;
 							echo "</a></button>";
+							
 						};
 				?>
 						<button type="button" data-id="<?php echo $row['id']; ?>" data-datefrom="<?php echo $row['date_from'] ?>" data-dateto="<?php echo $row['date_to']; ?>" data-type="<?php echo $row['type']; ?>"><img src="./icons/editing-modified.png" alt="Edit"></button>
@@ -156,29 +159,11 @@ if (isset($_POST['submit'])) {
 	}
 
 	$edit_id = $_POST['id'];
-	$refno = date('Y') .'-'. mt_rand(1,9999);
+	$refno = date('Y') . '-' . mt_rand(1, 9999);
 	$date_from = $_POST['datefrom'];
 	$date_to = $_POST['dateto'];
 	$type = $_POST["type"];
 	$datenow = date("Y-m-d H:i", time());
-
-	if ($type == 2) {
-		$expectedDateTo = date('Y-m-d', strtotime($date_from . ' +15 days'));
-		if ($date_to != $expectedDateTo) {
-			echo '<script>alert("For Semi-Monthly, Date To should be exactly 15 days greater than Date From")</script>';
-			echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
-			exit();
-		}
-	} elseif ($type == 1) {
-		$daysInMonth = date('t', strtotime($date_from))-1;
-		$expectedDateTo = date('Y-m-d', strtotime($date_from . ' +' . $daysInMonth . ' days'));
-		if ($date_to != $expectedDateTo) {
-			echo '<script>alert("For Monthly, Date To should be exactly ' . $daysInMonth . ' days greater than Date From")</script>';
-			echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
-			exit();
-		}
-	}
-	
 
 	if (empty($date_to) || empty($date_from) || empty($type)) {
 		echo '<script>alert("All fields are required")</script>';
@@ -188,9 +173,10 @@ if (isset($_POST['submit'])) {
 		$result = mysqli_query($conn, $sql);
 		$num = mysqli_num_rows($result);
 		if ($num > 0) {
-			$sql_update = "UPDATE `payroll` SET `date_from`='$date_from',`date_to`='$date_to',`type`='$type',`status`='0' WHERE id='$edit_id' ";		// Set status to 'New' explicitly
+			$sql_update = "UPDATE `payroll` SET `date_from`='$date_from',`date_to`='$date_to',`type`='$type',`status`='0' WHERE id='$edit_id' ";
+			$result_delete0 = mysqli_query($conn, "DELETE FROM payroll_items WHERE payroll_id=$edit_id");
 			$result_update = mysqli_query($conn, $sql_update);
-			if ($result_update) {
+			if ($result_update && $result_delete0) {
 				echo '<script>window.location="http://localhost/final/index.php?page=payroll"</script>';
 				echo '<script>alert("Payroll Data Updated")</script>';
 			}

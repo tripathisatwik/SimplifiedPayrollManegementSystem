@@ -24,7 +24,8 @@ while ($pay = mysqli_fetch_assoc($result)) {
 		}
 
 		.print-btn,
-		.back-btn {
+		.back-btn,
+		.recalc-btn {
 			background-color: #007bff;
 		}
 
@@ -79,6 +80,12 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			right: 5rem;
 		}
 
+		.recalc-btn {
+			position: absolute;
+			top: 10rem;
+			right: 10rem;
+		}
+
 		.modal {
 			display: none;
 			position: fixed;
@@ -102,8 +109,6 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			width: 80%;
 			height: 500px;
 		}
-
-
 	</style>
 	<button class="back-btn"><a href='http://localhost/final/index.php?page=payroll'>Back</a></button>
 	<div class="primary">
@@ -112,6 +117,7 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			<h4><b>Payroll : <?php echo $pay['ref_no'] ?></b></h4>
 		</div>
 		<div class="info">
+			<button class="recalc-btn" onclick="calculatePayroll(<?php echo $row['id'] ?>)">Re-calculate</button>
 			<button class="print-btn" onclick="printPayroll()">Print</button>
 			<p>Payroll Range: <b><?php echo date("M d, Y", strtotime($pay['date_from'])) . " - " . date("M d, Y", strtotime($pay['date_to'])) ?></b></p>
 			<p>Payroll Type: <b><?php
@@ -138,7 +144,7 @@ while ($pay = mysqli_fetch_assoc($result)) {
 			</tr>
 
 			<?php
-			$payroll = mysqli_query($conn, "SELECT p.*,concat(e.lastname,', ',e.firstname,' ',e.middlename) as ename,e.employee_no FROM payroll_items p inner join employee e on e.id = p.employee_id");
+			$payroll = mysqli_query($conn, "SELECT p.*,concat(e.lastname,', ',e.firstname,' ',e.middlename) as ename,e.employee_no,e.id as empid FROM payroll_items p inner join employee e on e.id = p.employee_id;");
 			while ($row = mysqli_fetch_assoc($payroll)) {
 			?>
 				<tr>
@@ -149,7 +155,8 @@ while ($pay = mysqli_fetch_assoc($result)) {
 					<td><?php echo number_format($row['allowance_amount'], 2) ?></td>
 					<td><?php echo number_format($row['deduction_amount'], 2) ?></td>
 					<td><?php echo number_format($row['net'], 2) ?></td>
-					<td><button class="view-btn" data-employee-id="<?php echo $row['employee_no'] ?>"><img src='./icons/watch.png' alt='View'></button></td>
+					<td><button class="view-btn"><img src='./icons/watch.png' alt='View'></button></td>
+					<?php $empid = $row['empid']; ?>
 				</tr>
 			<?php }  ?>
 		</table>
@@ -175,7 +182,8 @@ while ($pay = mysqli_fetch_assoc($result)) {
 		btn[i].onclick = function() {
 			modal.style.display = "block";
 			var payrollId = <?php echo json_encode($_SESSION['payroll']); ?>;
-			modal.querySelector('.modal-content').innerHTML = '<iframe src="view_payslip.php?id=' + payrollId + '" width="100%" height="100%"></iframe>';
+			var empId = <?php echo json_encode($empid); ?>;
+			modal.querySelector('.modal-content').innerHTML = '<iframe src="view_payslip.php?id=' + payrollId + '&empid=' + empId + '" width="100%" height="100%"></iframe>';
 		}
 	}
 
@@ -183,5 +191,22 @@ while ($pay = mysqli_fetch_assoc($result)) {
 		if (event.target == modal) {
 			modal.style.display = "none";
 		}
+	}
+
+	function calculatePayroll(id) {
+		$.ajax({
+			url: 'calculate_payroll.php',
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function(response) {
+				alert('Payroll calculation successful');
+				location.reload();
+			},
+			error: function(xhr, status, error) {
+				alert('Error calculating payroll: ' + error);
+			}
+		});
 	}
 </script>

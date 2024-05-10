@@ -107,14 +107,14 @@
                 <div class="right">
                     <div class="dropdown">
                         <?php if ($_SESSION['login_type'] == 1) { ?>
-                            <button onclick="toggleDropdown()" class="dropbtn"><img src="./icons/user.png" alt=""> <?php echo "Admin" ?> <i class="fa-solid fa-caret-down"></i></button>
+                            <button onclick="toggleDropdown()" class="dropbtn"><img src="./icons/account.png" alt=""> <?php echo "Admin" ?> </button>
                             <div id="dropdownContent" class="dropdown-content">
-                                <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                                <a href="logout.php"> Logout</a>
                             </div>
                         <?php } else { ?>
-                            <button onclick="toggleDropdown()" class="dropbtn"><i class="fa-solid fa-user"></i> <?php echo "User" ?> <i class="fa-solid fa-caret-down"></i></button>
+                            <button onclick="toggleDropdown()" class="dropbtn"><img src="./icons/account.png" alt=""><?php echo "User" ?></button>
                             <div id="dropdownContent" class="dropdown-content">
-                                <a href="logout.php"> Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                                <a href="logout.php"> Logout</a>
                             </div>
                         <?php } ?>
                     </div>

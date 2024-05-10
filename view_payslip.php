@@ -74,10 +74,29 @@
 	.deduction {
 		flex-basis: 48%;
 	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 20px;
+	}
+
+	th,
+	td {
+		padding: 5px;
+		border: 1px solid #ddd;
+		text-align: left;
+	}
+
+	th {
+		background-color: #007bff;
+		color: #fff;
+	}
 </style>
 <?php include 'dbconnect.php';
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && isset($_GET['empid'])) {
 	$payroll_id = $_GET['id'];
+	$employee_id = $_GET['empid'];
 	$payroll = $conn->query("SELECT p.*,concat(e.lastname,', ',e.firstname,' ',e.middlename) as ename,e.employee_no FROM payroll_items p inner join employee e on e.id = p.employee_id  where payroll_id=" . $_GET['id']);
 	foreach ($payroll->fetch_array() as $key => $value) {
 		$$key = $value;
@@ -113,26 +132,38 @@ if (isset($_GET['id'])) {
 				<div class="card">
 					<div class="card-header">
 						<span><b>Allowances</b></span>
-
 					</div>
-					<div class="card-body">
-						<ul class="list-group">
+					<div class="card-body" id="allowance_list">
+						<table>
+							<tr>
+								<th>S.no.</th>
+								<th>Name</th>
+								<th>Type of Allowance</th>
+								<th>Amount</th>
+							</tr>
 							<?php
-							$all_qry = $conn->query("SELECT * from allowances ");
-							$t_arr = array(1 => "Monthly", 2 => "Semi-Monthly", 3 => "Once");
-							while ($row = $all_qry->fetch_assoc()) :
-								$all_arr[$row['id']] = $row['allowance'];
-							endwhile;
-							foreach (json_decode($allowances) as $k => $val) :
-
+							$sno = 1;
+							$result2 = mysqli_query($conn, "SELECT * FROM `employee_allowances` INNER JOIN allowances on allowance_id=allowances.id where employee_id = " . $employee_id);
+							while ($row = $result2->fetch_assoc()) {
 							?>
-								<li>
-									<?php echo $all_arr[$val->aid] ?> Allowance
-									<span class="badge"><?php echo number_format($val->amount, 2) ?></span>
-								</li>
-
-							<?php endforeach; ?>
-						</ul>
+								<tr>
+									<td><?php echo $sno++ ?></td>
+									<td><?php echo $row['allowance'] ?></td>
+									<td>
+										<?php
+										if ($row['type'] == 1) {
+											echo 'Monthly';
+										} else if ($row['type'] == 2) {
+											echo 'Semi-Monthly';
+										} else if ($row['type'] == 1) {
+											echo 'Once';
+										}
+										?>
+									</td>
+									<td><?php echo $row['amount'] ?></td>
+								</tr>
+							<?php } ?>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -140,32 +171,41 @@ if (isset($_GET['id'])) {
 				<div class="card">
 					<div class="card-header">
 						<span><b>Deductions</b></span>
-
 					</div>
-					<div class="card-body">
-						<ul class="list-group">
+					<div class="card-body" id="deduction_list">
+						<table>
+							<tr>
+								<th>S.no.</th>
+								<th>Name</th>
+								<th>Type of Deductions</th>
+								<th>Amount</th>
+							</tr>
 							<?php
-							$all_qry = $conn->query("SELECT * from deductions ");
-							$t_arr = array(1 => "Monthly", 2 => "Semi-Monthly", 3 => "Once");
-							while ($row = $all_qry->fetch_assoc()) :
-								$ded_arr[$row['id']] = $row['deduction'];
-							endwhile;
-							foreach (json_decode($deductions) as $k => $val) :
-
+							$sno = 1;
+							$result2 = mysqli_query($conn, "SELECT * FROM `employee_deductions` INNER JOIN deductions on deduction_id=deductions.id where employee_id = " . $employee_id);
+							while ($row = $result2->fetch_assoc()) {
 							?>
-								<li>
-									<?php echo $ded_arr[$val->did] ?>
-									<span class="badge"><?php echo number_format($val->amount, 2) ?></span>
-								</li>
-
-							<?php endforeach; ?>
-						</ul>
+								<tr>
+									<td><?php echo $sno++ ?></td>
+									<td><?php echo $row['deduction'] ?></td>
+									<td>
+										<?php
+										if ($row['type'] == 1) {
+											echo 'Monthly';
+										} else if ($row['type'] == 2) {
+											echo 'Semi-Monthly';
+										} else if ($row['type'] == 1) {
+											echo 'Once';
+										}
+										?>
+									</td>
+									<td><?php echo $row['amount'] ?></td>
+								</tr>
+							<?php } ?>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</div>
-<script>
-</script>
